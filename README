@@ -1,2 +1,7 @@
+For the theory, and instructions on how to
+use the code, see the Theory/Mie1 and Theory/Mie2
+psf files.
+
+
 Shettle's models are sometimes bimodal, with an N1
-and n N2 (but same refracive index).
+and an N2 (but same refractive index).
