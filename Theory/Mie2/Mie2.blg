@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99c (Web2C 7.4.5)
+The top-level auxiliary file: Mie2.aux
+The style file: prsty.bst
+Database file #1: ../Mybib.bib
+Warning--entry type for "EMScatt:Mybib" isn't style-file defined
+--line 743 of file ../Mybib.bib
+Warning--entry type for "Vector:Mybib" isn't style-file defined
+--line 758 of file ../Mybib.bib
+Warning--We chuck the title of techreports in Phys. Rev.---\cite{WisRep:Mybib}.
+You've used 8 entries,
+            1909 wiz_defined-function locations,
+            551 strings with 4735 characters,
+and the built_in function-call counts, 1321 in all, are:
+= -- 33
+> -- 52
+< -- 0
++ -- 17
+- -- 9
+* -- 94
+:= -- 157
+add.period$ -- 8
+call.type$ -- 8
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 9
+duplicate$ -- 55
+empty$ -- 190
+format.name$ -- 17
+if$ -- 340
+int.to.chr$ -- 0
+int.to.str$ -- 8
+missing$ -- 0
+newline$ -- 27
+num.names$ -- 8
+pop$ -- 65
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 98
+stack$ -- 0
+substring$ -- 30
+swap$ -- 21
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 14
+warning$ -- 1
+while$ -- 10
+width$ -- 9
+write$ -- 38
+(There were 3 warnings)

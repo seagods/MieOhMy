@@ -1,0 +1,6 @@
+g++ -g -c testbes.cpp
+g++ -g -o testbes  testbes.o $HOME/libs/libslatec.a -lg2c
+
+
+
+

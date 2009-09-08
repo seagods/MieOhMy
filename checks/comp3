@@ -1,0 +1,5 @@
+g++ -g -c Mat.cpp
+g++ -g -o Mat  Mat.o  $HOME/libs/libslatec.a  -lg2c -lm 
+
+
+

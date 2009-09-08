@@ -1,0 +1,12 @@
+g++ -g -c Scalar.cpp
+g++ -g -o Scalar  Scalar.o  $HOME/libs/libslatec.a -lg2c -lm
+
+g++ -g -c Checkdenom.cpp
+g++ -g -o Checkdenom  Checkdenom.o  $HOME/libs/libslatec.a -lg2c -lm
+
+g++ -g -c ab.cpp
+g++ -g -o ab  ab.o  $HOME/libs/libslatec.a -lg2c -lm
+
+g++ -g -c CheckAN.cpp
+g++ -g -o CheckAN  CheckAN.o  $HOME/libs/libslatec.a -lg2c -lm
+

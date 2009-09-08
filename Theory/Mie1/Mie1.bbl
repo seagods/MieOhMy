@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{Liou:Mybib}
+K.~N. Liou, {\em An Introduction to Atmospheric Radiation} (Academic Press,
+  Elsevier Books, Oxford, 2002).
+
+\bibitem{Deirmendjian:Mybib}
+D. Deirmendjian, {\em Electromagnetic Scattering on Spherical Polydispersions}
+  (The RAND Corporation, Santa Monica, California, 1969).
+
+\bibitem{FeynLect:Mybib}
+R. Feynman, R.~B. Leighton, and M. Sands, {\em The Feyman Lectures on Physics}
+  (Addison-Wesley Publishing Company, Reading Massachusetts, Menlo Park,
+  California, London, Sydney, Manilla, 1964), Vol.~2.
+
+\bibitem{AbramowitzStegun:Mybib}
+M. Abramowitz and I. Stegun, {\em Handbook of Mathematical Functions} (Dover
+  Books, New York, 1972).
+
+\bibitem{Watson:Mybib}
+G.~N. Watson, {\em A Treatise on the Theory of Bessel Functions} (Cambridge
+  University Press, Cambridge, 1995).
+
+\bibitem{Chandrasekhar:Mybib}
+S. Chandrasekhar, {\em Radiative Transfer} (Dover Books, New York, 1960).
+
+\bibitem{BornWolf:Mybib}
+M. Born and E. Wolf, {\em Principles of Optics} (Pergamon Press, New York,
+  1975).
+
+\end{thebibliography}

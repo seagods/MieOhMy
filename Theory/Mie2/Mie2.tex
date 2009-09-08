@@ -1,0 +1,1140 @@
+\documentstyle[12pt]{article}
+\setlength{\textheight}{9.80in}
+\setlength{\textwidth}{6.40in}
+\setlength{\oddsidemargin}{0.0mm}
+\setlength{\evensidemargin}{1.0mm}
+\setlength{\topmargin}{-0.6in}
+\setlength{\parindent}{0.2in}
+\setlength{\parskip}{1.5ex}
+\newtheorem{defn}{Definition}
+\renewcommand{\baselinestretch}{1.2}
+
+\begin{document}
+
+\bibliographystyle{prsty}
+
+
+\thispagestyle{empty}
+
+\title{Mie Theory Calculations}
+\author{Chris Godsalve}
+\maketitle
+
+\tableofcontents
+
+
+\section{Introduction}
+
+In the article {\it Electromagnetic Scattering From a Sphere} \cite{EMScatt:Mybib} I 
+introduced the basics of the Mie theory, as well as some extensive revision on 
+electromagnetism and mathematics. At the end I pointed the reader to Warren Wiscombe's 
+excellent code that performs the task, and recommended the use of this code. 
+However, that of course didn't stop me writing my own, and this article 
+describes the nitty gritty of actually performing any calculations. 
+
+However, there is difference between what is described here and what was 
+done by Wiscombe in that we shall require the expansion of the scattering 
+functions in Legendre polynomials. 
+This can be done analytically  instead of by using numerical integration. 
+
+For practical applications, it is common that an integration over some statistical distribution of particle distributions.
+It is often the case that this will be a skew distribution with a long tail containing large particle sizes. It is here
+the ripple-spike problem occurs as described in appendix-B of Wiscombe's NCAR report \cite{WisRep:Mybib}.
+ Because of this, we shall investigate the sources of any possible numerical instability.
+
+At the end, a link is provided so that the reader can obtain my own code which calculates the Legendre coefficients
+given a modified gamma distribution of particle sizes.
+
+\section{The Mie Coefficients}
+
+We begin by recalling that the Mie $a$ and $b$ coefficients are at the heart of the calculation, and that for a sphere of radius $a$ these were given by
+Here, $n \ge 1$, $x=ka$
+
+\begin{equation}
+a_n=\frac{\psi^\prime_n(y)\psi_n(x)-m \psi_n(y) \psi^\prime_n(x)}{
+   \psi^\prime_n(y) \xi_n(x)-m \psi_n(y) \xi^\prime_n(x)}.
+\end{equation}
+\begin{equation}
+b_n=\frac{m \psi^\prime_n(y)\psi_n(x)- \psi_n(y) \psi^\prime_n(x)}{
+  m \psi^\prime_n(y) \xi_n(x)- \psi_n(y) \xi^\prime_n(x)}.
+\end{equation}
+Here, $n \ge 1$, $x=ka=2 \pi a / \lambda$, and $y=ma$ for a complex refractive index  $m$.   The functions $\psi$ and $\chi$ arise in eqns.57-60 in \cite{EMScatt:Mybib}. Here, the $\xi$ are similar to the Hankel functions in that
+$\xi=\psi - i \chi$.
+Generally, the series where the $a_n$ and $b_n$ are the coefficients shall be truncated at some value $N$.
+
+We shall follow Diermendjian \cite{Deirmendjian:Mybib} and write
+\begin{equation}
+a_n=\frac{A_n(y) \psi_n(x)-m \psi^\prime_n(x)}{
+   A_n(y) \xi_n(x)-m  \xi^\prime_n(x)}.
+\end{equation}
+\begin{equation}
+b_n=\frac{m A_n(y)\psi_n(x)-  \psi^\prime_n(x)}{
+  m A_n(y) \xi_n(x)- \xi^\prime_n(x)}.
+\end{equation}
+Here, we have kept the notation from \cite{EMScatt:Mybib} , and simply introduced\begin{equation}
+A_n(y)=\frac{\psi_n^\prime(y)}{\psi_n(y)}.
+\end{equation}
+or 
+\begin{equation}
+A_n(y)=-\frac{n}{y}+\frac{J_{n-1/2}(y)}{J_{n+1/2}(y) }.
+\end{equation}
+
+Furthermore, looking at the properties of the Bessel functions \cite{AbramowitzStegun:Mybib}, it turns out to be convenient to introduce the functions
+\begin{equation}
+w_n(x)=\sqrt{\frac{\pi x}{2}} [ J_{n+1/2}(x)-(-1)^n J_{-n-1/2}(x)].
+\end{equation}
+When this done, the Mie coefficients are written as
+\begin{equation}
+a_n=\frac{ \left ( 
+\frac{A_n(y)}{m}+\frac{n}{x}
+ \right )
+Re \lbrace w_n(x) \rbrace -Re \lbrace w_{n-1}(x) \rbrace
+}
+{ \left ( 
+\frac{A_n(y)}{m}+\frac{n}{x} 
+\right )
+ w_n(x) - w_{n-1}(x) }
+\end{equation}
+
+\begin{equation}
+b_n=\frac{ \left ( 
+m A_n(y)+\frac{n}{x}
+ \right )
+Re \lbrace w_n(x) \rbrace -Re \lbrace w_{n-1}(x) \rbrace
+}
+{ \left ( 
+m A_n(y)+\frac{n}{x} 
+\right )
+ w_n(x) - w_{n-1}(x) }
+\end{equation}
+
+\section{The $A_n$}
+
+The first thing we shall consider is the behaviour of the $A_n$, the 
+$J_{n+1/2}$ in the denominator of eqn.6 has many zeros as seen in Fig.1.
+So  for a real refractive index for instance, and this will mean trouble. 
+This is easily sidestepped in practice though.
+
+\vspace*{10cm}
+\begin{figure}[htb]
+\special{psfile=Bess.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ Bessel Functions $J_{n+1/2}(x)$ for real $x$ with $ n=0,1,2,3 \ldots$.}
+\end{figure}
+
+We suppose the $A_n$ shall be stored in some array $BIGA$, along with this array we can have a boolean array  $reciprocal$ stored alongside it. So we use the approach
+
+\begin{verbatim}
+	if(J_(n+1/2)* 100.0  > J_(n-1/2))then
+              store  -n/y+J_(n-1/2)/J_(n+1/2) in BIGA
+              store  false in reciprocal
+        else
+              store y J_(n+1/2)/(y J_(n-1/2)-nJ_(n+1/2) ) in BIGA
+              store true in reciprocal
+
+        if( reciprocal is false)then
+              use eqns 8 and 9 to calculate a_n and b_n
+        else
+              use eqns 10 and 11 to calculate a_n and b_n
+\end{verbatim}
+
+So if the denominator in eqn.6 is close to blowing up, we use
+\begin{equation}
+a_n=\frac{ \left ( 
+\frac{1}{m}+\frac{n A^{-1}_n(y)}{x}
+ \right )
+Re \lbrace w_n(x) \rbrace - A^{-1}_n(y)Re \lbrace w_{n-1}(x) \rbrace
+}
+{ \left ( 
+\frac{1}{m}+\frac{n A^{-1}_n(y)}{x} 
+\right )
+ w_n(x) - A^{-1}_n(y) w_{n-1}(x) },
+\end{equation}
+
+\begin{equation}
+b_n=\frac{ \left ( 
+m +\frac{n A^{-1}_n(y)}{x}
+ \right )
+Re \lbrace w_n(x) \rbrace -A^{-1}_n(y) Re \lbrace w_{n-1}(x) \rbrace
+}
+{ \left ( 
+m +\frac{n A^{-1}_n(y)}{x} 
+\right )
+ w_n(x) - A^{-1}_n(y) w_{n-1}(x) }.
+\end{equation}
+Of course,
+\begin{equation}
+A_n^{-1}(y)=\frac{ y J_{n+1/2}(y)}
+                 { y J_{n-1/2}(y)-n J_{n+1/2}(y) }
+\end{equation}
+follows immediately from eqn.6. So both the $A_n$ and the reciprocals are stored in the same array, with the boolean array telling us which formula for
+the Mie coefficients to use.
+\vspace*{11cm}
+\begin{figure}[htb]
+\special{psfile=AN1.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The real and imaginary parts of $A_n$ are roughly $0+i$
+ small $n$, and increase to roughly 2.75+3$i$ as $n \rightarrow 500$.}
+\end{figure}
+
+Deirmendjian calculated the $A_n$ by determining recurrence relations, and found that in the problem for $x=62$, and $m=1.28-1.37i$ that in using double
+precision arithmetic, the imaginary part of
+the $A_n$ was unstable after $n>60$ or so. However, modern library routines such as the amos library (which is also part of the slatec library) are highly accurate, robust, and efficient. In Fig.2 we plot the real and imaginary parts
+of $A_n(y)$ in this case for $n=1 - 500$ for exactly the same problem.  
+Here we have used eqn.6, and used the slatec zbesj function. We see there is no problem up to $n=500$ at all.
+However, for this case, as $n$ increases still further, both the real and
+imaginary parts of $J_{n+1/2}(y)$ become zero as far as double precision
+arithmetic is concerned. 
+
+So what should be done if,  for large $n$, both $J_{n+1/2}$ 
+and $J_{n+1+1/2}$ 
+are returned as zero by zbesj? According to Abramowitz and Stegun
+ \textsection 9.3 \cite{AbramowitzStegun:Mybib},  for large orders
+
+\begin{equation}
+J_\nu(z) \sim \frac{1}{\sqrt{2 \pi \nu}} 
+\left ( \frac{ez}{ 2 \nu} \right )^\nu
+\end{equation}
+Here, $z$ is kept constant as $\nu$ increases
+Of course, for real arguments for instance, this does not appear to be
+of much use because of the oscillatory nature of the Bessel functions.
+For this reason, Deirmendjian concluded that "their was no practical way 
+of making use of them in an exact machine program".
+However, in Fig.3 we plot the ratio $J_{n-1/2}(y)/J_{n+1/2}(y)$ 
+with a real refractive index of $m=1.28$.
+\vspace*{11cm}
+\begin{figure}[htb]
+\special{psfile=Ratio.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ $J_{n-1/2}(y)/J_{n+1/2}(y)$ as a function of n for m=1.28 }
+\end{figure}
+
+When $n$ becomes large enough, the oscillations die out, so can
+ eqn.13 be of any use after all? We observe from eqn.13 that
+\begin{equation}
+\frac{  J_\nu(y)  }{  J_{\nu+1}(y)   } \sim 
+   \sqrt{   \frac{\nu+1}{\nu}  }
+   \frac{  2(\nu+1)  }{e  z}
+ \left ( \frac{\nu+1}{\nu} \right )^\nu 
+\end{equation}
+and in the above example, the approximation is out by  about one percent
+for $n=450$. 
+ If the imaginary part of 
+the refractive index is large as in Deirmendjian's example above, there
+is a loss of of accuracy in the imaginary part of $A_n(y)$ of 3\% or so
+in the cases looked at by the author.
+
+However, if we cannot jump to greater precision arithmetic
+this small error must at least be more acceptable than truncating
+the Mie series too early. When $n$ s large enough (depending on $y$)
+the errors in $A_n$ will be dominated by the $n/y$ term at any rate.
+ This shall be discussed further below, where it is seen that as far as calculating the 
+Mie $a$ and $b$ coefficients is concerned, it doesn't matter at all.
+
+Before proceeding we note that as $n$ is increasing and the absolute
+values of the Bessel functions in eqn.6 are heading to zero, the 
+denominator may hit zero first, but it may not be a true zero
+of the actual Bessel functions. We must check the results of zbesj
+and find out at what point are all the Bessel functions are zero
+and use the asymptotic results after. Of course, it may be that 
+once the Bessel functions are very small indeed, that the relative
+accuracy may be low anyway, so perhaps a switching at an earlier
+point will be better. For the cases studied by the author though, this does
+not seem to be the case.
+
+\section{The Denominator in $a_n$ and $b_n$}
+
+One feasible problem in calculating the $a_n$ and $b_n$ is that the denominator
+could become zero, or be very close to zero. Physically, we know that the $a_n$ and
+$b_n$ are always finite, so that if this were the case, the numerator must also be zero
+or extremely small, in which case we must use L'Hospital's rule. Here we ask whether this
+is ever the case.
+
+Now the $w_n$ of equations 8 and 9 are given by
+\begin{equation}
+w_n(x)=\sqrt{ \frac{\pi x}{2}  } (j_n - i y_n)
+\end{equation}
+where the $j$ and $y$ are  the spherical Bessel functions.
+This might well give problems. There is a singularity at $x=0$
+so for large orders and small $x$ the slatec routine dbesy just gives
+an overflow message and stops, however, the routine can be easily modified
+to give an error code return and we for a given $x$ we can call the routine
+with a smaller maximum order and truncate there. Can we simply do this, or is
+the "small differences between large numbers" type error ever a problem?
+
+Let us rewrite eqn.8 in a different form.
+\begin{equation}
+a_n=\frac{ \left ( 
+\frac{A_n(y)}{m}+\frac{n}{x}
+ \right )
+Re \lbrace w_n(x) \rbrace -Re \lbrace w_{n-1}(x) \rbrace
+}
+{ y_n(x) \left \lbrack \left ( 
+\frac{A_n(y)}{m}+\frac{n}{x} 
+\right )
+ \left ( \frac{j_n(x)}{y_n(x)}-i \right )-
+ \left (
+\frac{j_{n-1}(x)}{y_n(x)}-i 
+  \frac{y_{n-1}(x)}{y_n(x)} \right ) \right \rbrack
+}.
+\end{equation}
+
+Now for small $x$ we have
+\begin{equation}
+y_n(x) \approx \frac{1}{x^{n+1}} \times 1 \times 3 \times 5 \ldots \times (2n-1)\end{equation}
+so
+\begin{equation}
+y_0(x) \approx \frac{1}{x},
+$$    $$
+y_1(x) \approx \frac{1}{x^2},
+$$   $$
+y_2(x) \approx \frac{1}{x^3} \times 3,
+$$    $$
+y_3(x) \approx \frac{1}{x^4} \times 15,
+$$   $$
+y_4(x) \approx \frac{1}{x^5} \times 105, 
+\end{equation}
+and so on.
+So, we have $y_{n-1}(x)/ y_n (x) \approx x/(2n-1)$ for $n=1,2,\ldots$.
+The question is this, although $y_n(x)$ will be very large for small
+$x$ and particularly  for large order, can the absolute value of
+the quantity
+\begin{equation}
+  f=\left \lbrack \left ( 
+\frac{A_n(y)}{m}+\frac{n}{x} 
+\right )
+ \left ( \frac{j_n(x)}{y_n(x)}-i \right )-
+ \left (
+\frac{j_{n-1}(x)}{y_n(x)}-i 
+  \frac{y_{n-1}(x)}{y_n(x)} \right ) \right \rbrack
+\end{equation}
+become very small?
+For small enough $x$ we put
+\begin{equation}
+  f \approx  -i
+ \left  \lbrack 
+ \left ( 
+ \frac{A_n(y)}{m}+\frac{n}{x} 
+ \right )
+- \frac{x}{2n-1} 
+   \right \rbrack.
+\end{equation}
+So we might immediately observe that the reciprocal term in $x$ 
+dominates, particularly for large $n$, and we so the function 
+$f$ will certainly not vanish. However this assumes that $x<<1$, but
+the $y_n$ can blow up for even $x>>1$ because of the (2n-1)!! term
+and we cannot assume that $x<< 1$ at all. Now, if the imaginary part
+part of of $A_n$ is non zero, then because all the other terms in eqn.20
+are real, we cannot arrive at the situation where the absolute value
+of eqn.20 becomes zero. However,  $A_n$  is pure real if the refractive
+ index is pure real.
+
+ The author has investigated the behaviour of the
+$f$, in regions where the approximation eqn.20 is valid, for a range of
+refractive indexes, $x$ and to high order, and it seems that the function $f$ 
+doesn't vanish under any circumstances in this case. 
+For large enough $x$ the $y_n$ are also oscillatory, but again, for
+all $x$ and all orders the denominator doesn't vanish, so L'Hospital's rule
+is never required.
+So it would appear that truncating the Mie series 
+at the first value of $N$ for which dbesy does not return an error code will 
+be fine for a given value $x$.
+
+Not only this, but the if we truncate in this way, we find in practice that we never reach 
+values of $N$ such that the asymptotic expression for the $A_n$ are needed.
+
+\section{Other Possible Sources of Error}
+
+Let us take a look at $a_1$ and $b_1$ as functions of $x$ as in Fig.4 and Fig.5.
+First, as Deirmendjian states, that if the refractive index is pure real, that
+the $a_n$ and $b_n$ all lie on a circle, of radius 1/2, and centred at $z=(1/2,0)$
+no matter what the value of $x$ is. If the imaginary part the refractive index is 
+non zero, then all values of $a_n$ and $b_n$ lie within this circle. Not only 
+that, but as $x \rightarrow \infty$ the $a_n$ and $b_n$ tend to a circle with
+a given radius of convergence also centred at $z=(1/2,0)$.
+
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=anplot1.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The real and imaginary parts of $a_1$ for a refractive index 1.29-0.0427i }
+\end{figure}
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=bnplot1.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The real and imaginary parts of $b_1$ for a refractive index 1.29-0.0427i }
+\end{figure}
+The behaviour is complicated, but the circle of constant radius emerges clearly
+for large $x$, the same behaviour is seen in Figs.6 and 7 for a different refractive 
+index, and in Fig.8 for a larger order.
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=anplot2.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The real and imaginary parts of $a_1$ for a refractive index 2.2-0.022i }
+\end{figure}
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=anplot51.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The real and imaginary parts of $a_{51}$ for a refractive index 1.29-0.0047i }
+\end{figure}
+
+For large values of $x$, with a refractive index 1.29-0.0427$i$, $a_{100}$
+ becomes close to (0.5,0), but then spirals out to trace circles of radius 0.06 about (0.5,0) for x values ranging from
+ 300 to 500. The quantities $a_{200}$, $a_{300}, a_{400}$,  behave similarly
+   with circles of .056, 0.055, 0.0546, in general, the $an$ and $b_n$ approach a 
+circle of convergence at about $x=2n$.
+What does all this mean? For large $x$ we end up with a series that for 
+(possibly very large) $N$ with terms of similar amplitudes. That is, it is not the 
+calculation of the Mie terms themselves which is the problem, but heavy cancellation
+in the summation of the series. In the next section we shall investigate the behaviour for
+large $x$ further.
+
+For small $x$ the $a_n$ and $b_n$ are close to zero and the the singularity in the $y_n$
+means that the series can be truncated at smaller values of $N$. Of course, as $x\rightarrow 0$
+in the long wavelength limit we get closer and closer to Rayleigh scattering.
+
+Before going on to the large $x$ limit, we now return to the problem of the $A_n$. Recall that
+the numerator and denominator vanish for large order because of the $(z/\nu)^\nu$ behaviour
+in eqn.13. We also saw that for large $n$ the $A_n$ ratio is well behaved if the use of
+the asymptotic expansion made for large $n$, and that Diermendjian had not noticed how the asymptotic
+limit could be used. Deirmendjian used recurrence relations for the $A_n$ \cite{Deirmendjian:Mybib}, 
+and Wiscombe discusses more
+sophisticated and robust recurrence relations developed over some time \cite{WisRep:Mybib}.
+We observe two points, the $A_n$ grow almost linearly, and they are multiplied in the
+denominator by Bessel functions which also have a $(z/\nu)^\nu$ behaviour and vanish for
+large order. In other words, for practical purposes, the $A_n$ in the numerator are multiplied by zero
+under the circumstances where the recurrence relations have to be used rather than
+a straightforward use of Bessel function routines, or indeed the asymptotic relations
+seen  here in eqn.14. As far as the author can tell, all the effort put into the recurrence
+relations are unnecessary. If there is a small error in $A_n$ at any stage using the asymptotic limit,  
+the $a_n$ will be zero, or effectively zero anyway. One might wonder if the $a_n$'s denominator vanishes
+along with the numerator for large order, however, the asymptotic relation \cite{AbramowitzStegun:Mybib}
+ensures that this most certainly does not happen, i.e. for fixed $z$ in the limit of large $\nu$, 
+\begin{equation}
+Y_\nu(z) \sim \sqrt{ \frac{2} {\pi \nu} } \left ( \frac{e z}{2 \nu} \right )^{-\nu}.
+\end{equation}
+
+\section{More on the Large $x$ Limit}
+
+We suppose now, we do not have scattering from a single sphere as discussed
+in \cite{EMScatt:Mybib}, but scattering from a large number of spheres distributed somehow in space. This may approximate for instance a water droplet cloud. It is supposed that the spheres are generally far enough apart so that each sphere is far enough from the others so that the far field approximation holds for the interaction between the spheres. What is more, as is of interest in cloud and atmospheric aerosols, we have a large range of sizes of these spheres. What are the optical properties of such clouds and hazes according to electromagnetic theory.
+
+This is the subject discussed extensively by Diermendjian \cite{Deirmendjian:Mybib}. Typically, the size distributions are well approximated by log-normal distributions or by modified gamma distributions. These distributions can have long `tails' into large particle sizes, and so when integrating any quantities over the size distribution to get say, an equivalent extinction coefficient, we may well need to calculate all the Mie theory quantities for large values of $x$. This is why we took a look at some of the asymptotic relations in the large $x$ limit. (We have some inkling on what will happen from the diagrams in 
+the previous section,)
+
+To add to them, for arbitrary $\nu$, the asymptotic limits of $J_\nu(z)$ and 
+$Y_\nu (z)$ (in the large $\vert z \vert $ sense) are \cite{AbramowitzStegun:Mybib}.
+\begin{equation}
+J_\nu(z)=\sqrt{ \frac{2}{\pi z}}
+   \left \lbrace
+       \cos \left (z-\frac{1}{2} \pi \nu -\frac{\pi}{4} \right )
+       +\exp( \vert Im(z) \vert)  O ( \vert z \vert^{-1} )
+    \right \rbrace
+$$   and $$
+Y_\nu(z)=\sqrt{ \frac{2}{\pi z}}
+   \left \lbrace
+       \sin \left (z-\frac{1}{2} \pi \nu -\frac{\pi}{4} \right )
+       +\exp( \vert Im(z) \vert) O ( \vert  z\vert^{-1} )
+    \right \rbrace.
+\end{equation}
+Looking at the formula for the $a_n$, we see that we have pure real arguments
+in the numerator, so that the exponential term is small for large $x$ and that
+ explains the oscillatory nature of the $a_n$ and $b_n$ seen in the figures 
+above. For real arguments, the `envelope' enclosing the oscillations is given
+by the envelope of the above asymptotic formula, but it is not until the
+argument is very large, especially for
+ high order, that the phase of the oscillations in the asymptotic expansions
+matches that of the actual Bessel functions.
+
+So, let us take a look at the $A_n$, using  eqn.21, it is easily found that provided $\kappa>0$,
+then
+\begin{equation}
+\frac{J_{n-1/2}(y)}{J_{n+1/2}(y)} \rightarrow i
+\end{equation}
+for sufficiently large $x$.
+This means that for large $x$
+\begin{equation}
+a_n \rightarrow \frac{ i/m J_{n+1/2}(x)-J_{n-1/2}(x)}
+                     { i/m (J_{n+1/2}(x)-Y_{n+1/2}(x) ) -(J_{n-1/2}(x)-Y_{n-1/2}(x) ) }.
+\end{equation}
+Again, using eqn.21, one arrives at
+\begin{equation}
+a_n \rightarrow  \left ( \frac{m}{m+1} \cos p -\frac{i}{m+1} \sin p \right) \exp(ip).
+\end{equation}
+Here we have put
+\begin{equation}
+p=x-(n-1/2) \frac{\pi}{2} -\frac{\pi}{4}.
+\end{equation}
+Switching to complex notation this can be rewritten as
+\begin{equation}
+a_n \rightarrow \frac{1}{2} \left ( 1+\frac{m-1}{m+1}  \exp(2 i p) \right ).
+\end{equation}
+That is, we expect that for large enough $x$, the $a_n$ will  circle the point in the complex
+plane (1/2,0) at a rate such that  a complete cycle takes place as $x$ varies from $X$
+ to $X+\pi$. Neither the rate at which $a_n$ rotates, or the diameter of this circle are affected by the order
+for large enough $x$, and once $x$ is large enough, the diameter does not decay.
+ This of course requires $\kappa \ne 0$, and so this formula is incorrect
+for pure real refractive indices. The reason is that for a pure real refractive 
+index the $A_n$ are pure real, so the  $A_n \rightarrow i$ only applies for
+a refractive index with a non zero imaginary component. The smaller the imaginary component, the larger the value of $x$ where the $A_n$ approaches $i$, and for a pure real refractive index
+ $A_n$ {\it never} approaches $i$ at all. As Deirmendjian points out, for a pure real
+refractive index the centre of the circle is same as for the complex case, and the diameter is
+ one half regardless of the value of the refractive index or order. 
+At any rate, for a size distribution with a very large  slowly decaying tail into large $x$
+values we end up with lots of oscillatory terms that do not decay.
+
+
+
+In general,  there may be numerical problems when adding large numbers of oscillatory terms
+ with similar magnitudes, for instance, in the Fourier series for a Dirac comb function (a
+periodic function consisting of Dirac delta functions placed at regular intervals).
+ If we try and perform the (impossible) numerical summation 
+ very large narrow spikes soon rise up in the right places,
+ but everywhere else all that is seen is numerical noise. The same is true if we replace the
+delta functions with say, large narrow Gaussian curves. Here the coefficients do decay, but very very 
+slowly (disregarding for the sake of general discussion the question of exactly how large is large?)
+So, we are in similar numerical trouble here, 
+ and  can such problems be remedied?
+
+\section{ Calculating the Scattering Function}
+
+In eqns. 121, 122, 131, and eqn 142 of \cite{EMScatt:Mybib} we encountered the angular
+ distribution of the scattered energy and the phase function.
+We note that first off, in eqns 121 and 131 we have the product of two 
+infinite series with  coefficients $a_n$ and $b_n$.
+The functions $\pi_n$ and $\tau_n$ are functions of angle alone.
+ Now, we could integrate over the size distributions
+over a discrete set of angles and see what the {\it scattering} function
+ (or{\it  scattering} matrix) actually looks like, but in
+ \cite{Vector:Mybib} the author discusses the problem of 
+multiple scattering in a radiative transfer context. Here,
+ to proceed, we must have the {\it phase } function represented in
+ terms of Legendre Polynomials. 
+
+The reason for the emphasis is that there can be some confusion. The phase function
+is normalised. It would be completely wrong to integrate the Legendre
+coefficients of the phase function over the size distribution as large
+ particles would be underrepresented
+by far. The scattered energy is proportional to $K_{sc}(x) x^2$. So, we must
+calculate the Legendre coefficients of the scattering function and integrate these
+over the distribution. If $L_k(x)$ are the Legendre coefficients for the
+ scattering matrix
+and $\Lambda_k(x)$ are the Legendre coefficients for the phase matrix, then
+\begin{equation}
+\Lambda_k=\frac{ 
+4\int_0^\infty \rho(x) L_k(x) \> dx }{
+\int_0^\infty \rho(x) x^2 K_{sc}(x) \> dx }.
+\end{equation}
+
+
+To add to the confusion,
+in \cite{Dave1:Mybib}, Dave defines the matrix elements such as $M_1$ as
+the elements of the scattering matrix, and gives the Legendre coefficients $L$
+as the Legendre coefficients of the scattering matrix. However in \cite{Dave2:Mybib}
+Dave uses the same notation $M_1$ notation for the phase matrix.
+
+
+Of course, the infinite series for the  scattering functions must 
+be truncated at some value 
+$N_{max}$ depending on the value 
+of the size parameter $x$. If the particle size distribution 
+has a long slowly decaying tail into large values of  $x$, then the 
+value of $N_{max}$ might be very large indeed.
+
+
+We could multiply out the series, and integrate the quantities such as
+$a_i(x) \times b_j(x)$ and obtain the Legendre coefficients by integration over angle
+at the end of the integration over size distribution.
+However \cite{Dave1:Mybib}, as discussed in  \cite{Vector:Mybib}, J. V. Dave has 
+shown that the Legendre coefficients
+ may be calculated directly from the Mie $a_n$ and $b_n$ coefficients 
+without any angular numerical integration over angles 
+ at all. For the convenience of the reader, we repeat the
+ equations later as they arise.
+The relations between the Legendre coefficients for 
+the scattering function and the Mie coefficients
+ seem to be a rather fearsome summation, however only the inner
+sums  involving the $C C^*$ and like terms are functions of $x$.
+
+For each $x$,  we must calculate all the $a_n$ and $b_n$. From 
+these the $C$'s and $D$'s
+ of eqn.20 in \cite{Vector:Mybib} can be calculated.
+\begin{equation}
+C_k=\frac{1}{k}(2k-1)(k-1)b_{k-1}
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack a_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack b_{p+1} \right \rbrace
+$$ and $$
+D_k=\frac{1}{k}(2k-1)(k-1)a_{k-1}
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack b_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack a_{p+1} \right \rbrace,
+\end{equation}
+where $p=k+2i-2$ for the equations for the $C$ and $D$ vectors.
+
+Once  this is done, for a single $x$ value, the Legendre coefficients are given by
+\begin{equation}
+L^{1}_k=(k-1/2) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( D_p D_q^*)
+$$  $$
+L^{2}_k=(k-1/2) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( C_p C_q^*)
+$$  $$
+L^{3}_k=(k/2-1/4) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( C_p D_q^* + C_p^* D_q)
+$$  and $$
+L^{4}_k=(k/2-1/4) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Im( C_p D_q^* - C_p^* D_q)
+\end{equation}
+Note that 
+$k^\prime=(k-1)/2$ for odd $k$ and $(k-2)/2$, for even $k$, $q=m+i+1+\delta$ where $\delta=0$ for odd
+values of $k$ and is unity for even $k$. Also  for odd $k$, $\Delta$ is 1 if $i=0$ and 2 otherwise, and  for even $k$
+$\Delta=2$. Also, $p=m-i+1$. The reader may note that the terms such as $Re(C_p C_q^*)$ can be written as an
+upper triangular matrix. Each matrix element will now be integrated 
+over a size distribution, and the Legendre
+coefficients may be calculated after the integration has been 
+performed.
+
+{\it
+ The $L^1$ and $L^2$ are the coefficients
+ for Diermendjian's $i_2$ and $i_1$ (\cite{Deirmendjian:Mybib} eqn.76). In Diermendjian's
+notation, $i_4$ has the opposite sign to Dave's $D_{21}$ (\cite{Dave2:Mybib} eqn.6). }
+
+
+We shall examine a few graphs for the functions $C$ and $D$ to get some feel as to how
+they behave. First off, we shall just look at the real and imaginary parts of  some $C$s with a refractive
+index of 1.3-0.002$i$ as a function of size parameter, and for different series truncation values.
+
+
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=G1.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ A plot of the real part of $C_0$ for a refractive index of
+1.3-0.002$i$. }
+\end{figure}
+
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=G2.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ A plot of the real part of $C_0$ for a refractive index of
+1.3-0.002$i$. }
+\end{figure}
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=G5.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ A plot of the imaginary  part of $C_{100}$ for a refractive index of
+1.3-0.002$i$. }
+\end{figure}
+
+In Fig.8, we plot $Re(C_0(x))$ truncating the series at $i=10$ and $i=100$.
+Truncating at $i=1000$ alters the values of $C_0$ by about a tenth of 1\% at $x=100$,
+and there is no change if the series is truncated at 10 000.  At the resolution
+of the plot there appear to be spikes here and there. However, increasing the resolution
+shows these to be well behaved smooth curves. So it can be concluded that these
+are not the signature of numerical noise as discussed earlier at the end of \textsection 6.
+ Fig.9 shows the imaginary
+part of $C_0$, which oscillates around zero. As $n$ is increased, the $C_n$ behave 
+in similar ways to $C_0$, except that for $x$  much less than $n$, the values of
+$C_n$ are close to zero. For instance, in Fig.10, the real part of $C_{100}$ is close to zero
+for $x <90$, the same is true for the imaginary part. As for the $D$'s, the real
+and imaginary parts display similar features to those of the $C$s.
+
+If the real part of the refractive index is increased, while the imaginary part is kept 
+small the small scale features are amplified, and the rate of oscillation increases. In 
+general, increasing the imaginary part smooths out the small scale features.
+So, we can conclude that
+the "ripple-spike" problem does not appear to occur when calculating the $C$ and $D$ values
+of eqn.28. 
+However there are small scale features which are smooth and well behaved, and there 
+may well associated accuracy problems when integrating over the size distribution.
+
+To proceed, the integration scheme used by the author is as follows. We step 
+along the $x$ axis in intervals of $\Delta $. The author finds that $\Delta=1$
+ is a reasonable value in practise. For each interval, we have  an $N_g$ point Gauss-Legendre integration
+rule, and
+for each $x$ we calculate the $C$ and $D$ vectors, the upper triangular matrices of 
+products having been initialised at zero are added to after being  
+multiplied by the weights. For instance
+\begin{equation}
+ \int_0^\infty \rho(x) Re(C_p C_q^*) dx=
+$$    $$
+ \int_0^\Delta \rho(x) Re(C_p C_q^*) dx+
+ \int_\Delta^{2 \Delta} \rho(x) Re(C_p C_q^*) dx+
+ \int_{2 \Delta}^{ 3 \Delta }\rho(x) Re(C_p C_q^*) dx+ \ldots
+$$  $$
+\approx \sum_{n=1}^{N_g} w_n \rho(x_n) Re(C_p(x_n)*C^*_q(x_n))
++ \sum_{n=1}^{N_g} w_n \rho(x_n+\Delta) Re(C_p(x_n+\Delta)*C^*_q(x_n+\Delta)) 
+$$   $$
++ \sum_{n=1}^{N_g} w_n \rho(x_n+2*\Delta) Re(C_p(x_n+2*\Delta)*C^*_q(x_n+2\Delta))+\ldots,
+\end{equation}
+where the $x_n$ are the quadrature points on the interval $(0,\Delta)$ (in practise this
+will be the interval (0,1) as stated.
+We stop when the size distribution function becomes very small. So there
+are two factors controlling the accuracy apart from where to truncate the Mie series. 
+That is, the decision of how many intervals are needed (or how far to march 
+along the $x$ axis), and the order of quadrature rule to use. The
+upper triangular matrices should, of course, be stored in compact vector form.
+
+Now we return to eqn.29.  We shall repeat Dave here \cite{Dave1:Mybib}, 
+hopefully we shall make it easier to follow than in the original.
+The start value of the outer sum over $m$ is 0 for $k=1$ and $k=2$. It is 1
+ for $k=3$ and $k=4$, and it is 2 for $k=5$ and $k=6$. The sequence is obvious. 
+Now if $m$ is greater
+than the starting value for the series, that is $m>k^\prime$,  and if $k$ is odd
+\begin{equation}
+A^{k-1}_m= \frac{ (2m-k)(2m+k-1)}{(2m+k)(2m-k+1)} A^{k-1}_{m-1}.
+\end{equation}
+If $k$ is even, then
+\begin{equation}
+A^{k-1}_m= \frac{ (2m-k+1)(2m+k)}{(2m+k+1)(2m-k+2)} A^{k-1}_{m-1}.
+\end{equation}
+Of course, we need the initial values for $m=k^\prime$. For $k=1$ $A^0_0=2$, and for 
+$k=2$ it is $A^1_0=4/3$.
+
+If $k$ is larger than 2, the above recurrence relations still hold, however there is
+another recurrence relation for the starting value $m=k^\prime$.
+Again, it depends on whether $k$ is odd or even.
+If $k=3,5,7,\ldots$ then the start value is
+\begin{equation}
+A^{k-1}_{(k-1)/2}= \frac{ 4(k-1)(k-2) }{ (2k-1)(2k-3) } A^{k-3}_{(k-3)/2},
+\end{equation}
+and for $k=4,5,8,\ldots$ 
+\begin{equation}
+A^{k-1}_{(k-2)/2}= \frac{ 4(k-1)(k-2)}{(2k-1)(2k-3)}A^{k-3}_{(k-4)/2}.
+\end{equation}
+
+Similarly, if $i>0$, then for odd $k$
+\begin{equation}
+B^{k-1}_i=\frac{(k-2i+1)(k+2i-2)}{(k-2i)(k+2i-1)}B^{k-1}_{i-1},
+\end{equation} 
+and for even $k$
+\begin{equation}
+B^{k-1}_i=\frac{(2i+k-1)(2i-k)}{(2i-k+1)(2i+k)}B^{k-1}_{i-1}.
+\end{equation} 
+For $k=1$ the start value $b^0_0$ is 1, and for $k=2$ it is $b^1_0$ which is 1/2.
+After which the start values are
+\begin{equation}
+B^{k-1}_0= \frac{(k-1)(k-3)}{k(k-2)} B^{k-3}_0
+\end{equation}
+ for even $k$, and
+\begin{equation}
+B^{k-1}_0= \left (\frac{k-2}{k-1} \right )^2 B^{k-3}_0
+\end{equation}
+ for odd $k$.
+
+It is noted that the $L$s of eqn.29 are the Legendre coefficients 
+for the scattering functions.
+To normalise, we must also calculate the scattering efficiency. That is
+\begin{equation}
+K_s=\frac{2}{x^2}\sum_{n=1}^\infty (\vert a_n \vert^2  +\vert b_n \vert|^ 2).
+\end{equation}
+Also of interest is the extinction efficiency
+\begin{equation}
+K_e=\frac{2}{x^2}\sum_{n=1}^\infty Re( a_n+b_n).
+\end{equation}
+We introduce
+\begin{equation}
+{\overline K_{sc}}=\int_0^\infty x^2 \rho(x) K_{sc}(x) \> dx
+$$   and $$
+{\overline K_{ex}}=\int_0^\infty x^2 \rho(x) K_{ex}(x) \> dx
+\end{equation}
+and the single scattering albedo for the distribution
+\begin{equation}
+\varpi_0=\frac{K_{sc}}{K_{ex}}.
+\end{equation}
+To get from the coefficients for the scattering function to the normalised phase 
+function we must multiply the coefficients by $4/{\overline K_{sc}}$.
+
+\section{Size Distribution}
+
+The author is most interested in atmospheric applications. Here the  modified
+gamma distribution is a very common model.
+That is the probability density function for finding a particle
+with radius between $r$ and $r+dr$ is
+\begin{equation}
+\rho(r)= a r^\alpha e^{-b r^\gamma}.
+\end{equation}
+Setting the derivative to zero gives us the mode radius
+\begin{equation}
+r_m= \left ( \frac{\alpha}{ b \gamma } \right )^{1/\gamma}.
+\end{equation}
+In practice, a mode radius is given for a particular distribution, from which 
+$b$ is calculated.
+We use the result (which follows from the definition of the $\Gamma$ function)
+\begin{equation}
+\int_0^\infty x^{\nu-1} e^{-\mu x} d x= \frac{\Gamma (\nu)}{\mu},
+\end{equation}
+so that normalisation gives us
+\begin{equation}
+a= \frac{ \gamma b^{ (\alpha+1)/\gamma } }{ \Gamma((\alpha+1)/\gamma) }.
+\end{equation}
+The mean radius is then
+\begin{equation}
+< r \rho(r)> =\frac{ a \Gamma((\alpha+2)/\gamma) }{ \gamma b^{(\alpha+2)/\gamma)} }.
+\end{equation}
+The average values of the square and the cube are found by replacing
+$\alpha+2$ with $\alpha+3$ and $\alpha+4$. These are important if
+we are given the total mass or volume of the particles in the cloud or haze.
+As to values of $\alpha$ and $\gamma$,
+Deirmendjian uses the following values for $\alpha$ and $\gamma$ in his definitions
+of distribution types.
+distribution \cite{Deirmendjian:Mybib}. 
+\center{
+\begin{tabular}{lllll} \hline
+Type & $N$ &  $r_m$  & $\alpha$ &  $\gamma$ &  \\ \hline
+Rain M & 100$cm^{-3}$  & 0.05 $\mu m$ &  1  & 1/2 & \\ 
+Haze M & 1000$cm^{-3}$  & 0.05 $mm$ &  1  & 1/2 & \\ 
+Haze L & 10$cm^{-3}$  & 0.07 $\mu m$ &  2  & 1/2 & \\ 
+Rain L & 1000$cm^{-3}$  & 0.05 $\mu m$ &  2  & 1/2 & \\ 
+Haze H & 100$cm^{-3}$  & 0.1 $\mu m$ &  2  & 1 & \\ 
+Hail H & 10$cm^{-3}$  & 4.0 $\mu m$ &  2  & 1 & \\ 
+Cumulus C.1 & 100$\mu m^{-3}$  & 4.0 $\mu m$ &  6  & 1 & \\ 
+Corona C.2 & 100$\mu m^{-3}$  & 0.05 $\mu m$ &  8  & 3 & \\ 
+MOP cloud C.3 & 100$\mu m^{-3}$  & 2.0 $\mu m$ &  8  & 3 & \\ 
+Corona C.4 & 100$cm^{-3}$  & 4.0 $\mu m$ & 61  & 3 & \\ \hline
+\end{tabular}
+}
+\begin{flushleft}
+In other cases, the log-normal (or lognormal) distribution is a good description.
+Both the modified gamma and lognormal distribution are used by
+Shettle and Fenn \cite{ShettleFenn:Mybib} in their classic work.
+The standard form for the lognormal distribution is
+\begin{equation}
+\rho(r)= \frac{ e^{-\lbrack (ln r-\mu)^2/2 \sigma^2 \rbrack} }{ r \sigma \sqrt{2 \pi}}.
+\end{equation}
+The moments are given by
+\begin{equation}
+\mu_k= \int_0^\infty r^k \rho(r) dr=e^{\mu k +k^2 \sigma^2},
+\end{equation}
+so that the mean radius and mean area and volume are easily calculated.
+
+When the lognormal distribution is used there can be some confusion.
+Experimenters will use logs in base 10 in their results as this is much 
+easier to understand visually, and therefore tend to use logarithms in base 10
+when defining a lognormal fit to data.
+
+As changing bases in logarithms is easily forgotten, we make a brief mention
+of it here. If
+\begin{equation}
+y=a^x,
+$$ then  $$
+y=(b^{\log_b a})^x,
+$$    so $$
+\log_a y = x, 
+$$    $$
+\log_b y = x \log_b a,
+$$ in which case $$
+\log_a y= \frac{log_b y}{\log_b a}.
+\end{equation}
+So, if we use  logs to the base 10 in the argument of the exponential in eqn.46
+and write $\mu =\log_{10} r_m$ we have
+\begin{equation}
+\rho(r)= \frac{ e^{ -\lbrack (ln(10))^2(\log_{10} r  -\log_{10} r_m)^2/2 \sigma^2}\rbrack }{ r \sigma \sqrt{2 \pi}}.
+\end{equation}
+Now if we write $ {\overline \sigma} = \sigma/ln(10)$ we have the form
+\begin{equation}
+\rho(r)= \frac{ e^{ -\lbrack(\log_{10} r  -\log_{10} r_m)^2/2 \sigma^2 \rbrack} }{ln(10) r {\overline\sigma} \sqrt{2 \pi}}.
+\end{equation}
+Despite the odd looking mix of logarithms to different bases and the the number $e$,
+this is quite a natural way to present experimental data. Indeed, the distribution
+is used in this form in \cite{ShettleFenn:Mybib}. All the moments of eqn.47 follow 
+immediately on recalling that $\sigma = ln(10) {\overline \sigma}$. Note
+that the values of $\sigma$ tabulated in Shettle and Fenn are ${\overline \sigma}$
+according to the notation above.
+
+We note that the scattering cross sections will vary very roughly with
+the size parameter squared, which means that even when the pdf has small
+values at large $r$, the contributions from the particles may still be large.
+
+\section{The Computer Code}
+
+There are downloadable computer codes at this site for calculating 
+all that has been outlined so far. These can be found via
+http://seagods.stormpages.com. Here we shall describe how to
+use them. Note that any dependencies not downloadable elsewhere 
+(in this case Mydbesj) can be found under Mylib.
+
+The programs are called Scalar.cpp, and Vector.cpp. Naturally Scalar.cpp
+computes the scalar scattering function, while Vector.cpp calculates the four
+components of the scattering matrix.
+
+If we are given a complex refractive index of for the particles
+ and the wavelength, and a size distribution we can calculate 
+all the properties we need.
+The size distribution is in the code can be either the  modified gamma 
+distribution which is
+completely described by the values  $\alpha$, $\beta$, and a mode radius, or
+a lognormal distribution as defined by $\sigma$ and a mode radius.
+ 
+
+For the moment we suppose that the code has been downloaded, and
+ the user needs
+to know how to use it.
+
+Apart from the physical parameters and the size distribution type, the user
+must supply the order of Gauss quadrature for each subsection for integration
+over the size distributions.
+Where to truncate the series, is calculated internally. The user must supply a 
+tolerance for the accuracy of the integral of $x^2 \rho(x)$ to be calculated.
+This gives a measure of how much of the size distribution has been captured.
+The factor of $x^2$ is used because we are integrating quantities which hrow as 
+$x^2$, so the integral of $\rho$ might be very close to one, but we shall still
+be chopping off the tail of the distribution too early if we use this latter 
+integral  as a measure. The value of $x$ at which the tolerance is met determines
+the truncation of the Mie series at $N_{max}=v x_{max}+w$. The recommended values
+are $v=2$ and $w=10$ \cite{Dave1:Mybib} p1890. However, the user is free to increase
+ either and they are part of the user input.
+
+ Of course, this value could be used to truncate the series
+for all values of $x$, but we can gain considerable speed up if we use the same
+rule to $N=v x+w$ for each $x$. The user has an option as to whether this speed up
+is used, but the speed up is recommended.
+
+(How these and other parameters are input will be described shortly.)
+
+We recommend that the user experiments as in the following manner. 
+Set a coarse
+integration rule first, and choose not to calculate the Legendre moments.
+Two output files, distfun.dat and  distfun\_xsq.dat  enables the user to see how
+the p.d.f, and the p.d.f times the square of the size parameter $x$ behaves over the
+interval.
+The output
+will include also the numerical approximation to the
+ area under the pdf curve, the numerical approximations to -  and
+analytical values of: the mean radius; mean surface area; and mean volume.
+
+Next, the user can increase the
+resolution of the integration (while still omitting to calculate the Legendre
+moments) to get an idea as to how the optical depth per kilometer and the single 
+scattering albedo converge. Then, the user can start to look at how the
+Legendre moments are behaving. Depending on the distribution function parameters,
+the  mode radius, and wavelength, this can take a considerable amount of
+ computing time. The integration is performed by stepping along the $x$ axis
+in units of $x=1$ at a time, and performing a gauss quadrature on each subinterval.  
+
+There are two things that can be mentioned at this point. The first normalised
+phase function moment should
+be equal to one. So, how close to one the numerical integration gets is at least some
+indication whether the code is getting there or not. The second moment is
+3 times the asymmetry parameter mentioned earlier, and is also an indicator for
+convergence. {\it However, the Legendre coefficients output by the code are the $L_k$
+of the unnormalised scattering matrix. The quantity ${\overline K_{sc}}$ is part of the 
+output, so the normalisation must be made by the user.}
+
+The reason for this is that it may be envisaged that the numerical integration
+may be required to done in `chunks'. This is so tha the
+This will happen if the computer on which
+the code is run has to be switched off overnight, and the integration takes more
+time  than the `on time' of the computer. Of course, if the user has access to many
+ machines over a network, or has parallel processing capability, the user can split 
+the problem up to reduce run-time.
+Splitting the integration into parts
+and adding all them all up at at the end is then the way to proceed.
+
+This is the reason that the Legendre coefficients of the scattering matrix
+are output rather than the Legendre coefficients of the normalised phase function.
+It is also up to the user to rename all the output files (in a script or manually).
+So, the output files from the "Vector" program should be renamed "Vector\_part1.dat",
+ "Vector\_part2.dat", and so on. If the scalar program is split up, the outputs
+should be renamed "Scalar\_part1.dat", and so on. This renaming could be done
+ manually, or in a script written by the user.
+
+
+
+There is  further code to add up all the sub integrations for the ${\overline K_{sc}}$,
+ ${\overline K_{ext}}$, 
+and the ${\overline L_k}$ so as to calculate the $\Lambda_k$
+for the distribution, the extinction coefficient per metre for the distribiution, and
+the singlle scattering albedo. These are StitchS.cpp and StitchV.cpp which expect the 
+input files described above. To convert to normalised Legendre coefficients, use NormaliseS or NormaliseV after the Stitch programmes have been run.
+
+
+\subsection{input}
+At this point we can introduce the input file which must be named "input.dat".
+An example is
+\begin{verbatim}
+1.3  0.02   0.5e-6         
+2.0  0.5   2e-6  100.0
+16 1e-6
+1 1 1
+2.0  10
+0 100 200
+\end{verbatim}
+The first line consists of $n_r$, $\kappa$, and $\lambda$. The complex
+refractive index  in the code is $m=n_r-i \kappa$, so don't forget that $\kappa$ has
+to be positive in the input file. Also, note that the wavelength is in metres,
+so that the input wavelength is in the visible part of the spectrum.
+
+The second line are the two  parameters of the size distribution,
+and the next number is the mode radius (again in metres). The last is
+the number density. Much data are in the numbers per cc, so in the input
+file, the number {\it must have} units of per cubic centimetre.
+ The two parameters for the 
+size distribution are $\alpha$ and $\gamma$ for the modified gamma distribution.
+If the lognormal is selected (see line 4 below) the first parameter is 
+${\overline \sigma}$, {\it and the second parameter is a dummy but must be there}. 
+Another thing to recall is the the value of $\sigma$ should actually be
+the value according to the transformed lognormal of eqn.50, that is
+enter ${\overline \sigma}$ rather than $\sigma$.  
+
+The third line consists of two numbers. The first is the order of gauss quadrature
+for integration over each subinterval of the size distribution. The second
+ number is the tolerance as 
+discussed in the previous section. Decreasing this will increase the cutoff in $x$
+and increase the the maximum truncation value for the size distribution (called $istop$
+in the actual code).
+ 
+
+The fourth line consists of two boolean variables, and an option number.
+ The first  boolean variable is 1 if
+we truncate the Mie at smaller values where  $x$ is small in the integration.
+If not, it will truncate at the value of $istop$ whatever the integration point.
+The second boolean should be set to 1 if the Legendre moments are to be calculated,
+and to 0 if only the extinction coefficient and single scattering albedo are required.
+The option number is to be set to 1 if the modified gamma distribution is used
+and two if the lognormal is to be used. (In fact, it will be the lognormal if
+any number other than one is used.)
+
+The fifth line tells the  how to calculate the cutoff if
+the low order truncation (line 4) is used for small $x$. These numbers should be 
+integers, and the values of 2 and 10 are recommended as stated above.
+
+The last line consists of a bool which tells the code whether the the integration
+is to be split up into chunks or not. If it is not to be split up, the value
+of $istep$ shall run from zero to $nsteps$, which is where the tail of the distribution
+is cut off according to the value of the tolerance. Nonetheless, two integers are
+required next, and these shall be overwriten with zero and $nsteps$ internally.
+
+If the integration is to be split up, then $istep$ will run from the first integer
+($chstart$) up to the second integer ($chstop$). The value of $chstop$ for the
+last chunk where the tail of the distripbution should be $nsteps$. The user will
+know what this value is from experimenting with the tolerance, which outputs
+the value of $nsteps$ to the screen.
+
+Please note that {\it there are no safety belts}, that is the program will just
+crash and burn if there is any inconsistency in the input, or worse still produce
+believable looking garbage. It is entirely up to the user to understand the input 
+and get it right, or when writing a script to call the program, to get their own script
+right for all circumstances.
+
+\subsection{output}
+
+The output file is "Scalar.dat". It includes some of the 
+input data so as to keep track of which file is which. (For multiple
+runs the author is used to writing shell-scripts to create each input file
+and copy the output file to a different name after the run.)
+
+So, the first line of output is the mode radius, and $\alpha$ and $\beta$ 
+of the size distribution. The second line consists of the $n_r$ and $\kappa$.
+
+The first number on the third line is the optical depth for metre at
+the given number density per cc. The second is the single scattering albedo,
+the third is ${\overline K_{sc}}$, the fourth is ${\overline K_{ex}}$.
+and the fifth is the number density. {\it The number density is
+ in numbers per cc, even though it's MKS in the program}.
+The next line consists of the mean radius, spherical surface area, and volume.
+This enables the surface area and volume of scatterers per cubic metre 
+for the input number density.
+The next line consists of four integers, $nsteps$, $istop$, $chstart$ and $chstop$.
+The values of $chstart$ and $chstop$ will be zero and $nsteps$ if the integration
+has not been split into several or even many runs. (Recall that $istop$ is the 
+truncation value for the Mie series and so gives the number of moments in 
+the output.)
+
+The following lines are the Legendre moments of the scattering matrix
+or scattering function in the scalar case.  These are in order, one per 
+line or four per line for the vector case. If there are many files, one per chunk,
+then these numbers must all be added to make one final output file.
+
+Once we have the single output file, we can find the moments
+of the normalised phase function. We simply read in the output file
+and do the normalisation described above and write it to a new file.
+
+If the first normalised moment is close enough to one, but not quite 
+the user {\it could} normalise them by dividing all the moments by the first.
+However, this is a sign of poor convergence or of chopping off the distribution
+tail too early. So it is best to  calculate again with a finer Gauss quadrature 
+rule in eqn.31, and/or a lower tolerance.
+
+
+\end{flushleft}
+
+
+\section{A Few Numerical Experiments}
+
+\begin{flushleft}
+
+We start off with a particularly challenging distribution, the large component
+of the Shettle and Fenn dust aerosols \cite{ShettleFenn:Mybib}. This has
+a value of $\overline \sigma$ of 0.475, and a mode radius of $0.5\mu m$.
+At a wavelength of $0.337 \mu m$ this has a refractive index of 1.53-0.008 $i$
+ as obtainable from  HITRAN \cite{RothmanETAL:Mybib}. 
+
+The author has  a 1GHz PC with a 0.5Gbyte RAM and a Linux operating system.
+ So the reader
+will see how the code performs under fairly limited circumstances at least.
+
+First, we shall compute the components of the scattering matrix rather than just the scalar phase function.
+With a tolerance of 1.0e-3, the number of unit intervals for Gauss quadrature
+is 2996.  If we set $chstart$ to 2995, $chstop$ to 2996.and use a 16 point Gauss quadrature over this interval, the C clock function gives a time of 334 seconds for the integration over the unit interval. However, in reality, the time duration is much longer than this.
+There is heavy paging going on in virtual memory, and this seems to affect the C clock function. The real time duration is more like half an hour. Also, the computer slows down to a crawl for any other function, even though the priority is set to a minumum using the "nice" command. In effect, the machine is completely tied up. If the programme is run without minimising the priority, the machine is "frozen" completely. 
+
+The run time for the calculation is simply too much, however, if we reduce the tolerance, so that the integral of $x^2$ times the pdf is short by 0.25\% rather than 0.1\%, the 
+integration time per unit interval is reduced to about three to four minutes, and the machine does not freeze. This now requires integration over 2198 unit intervals.
+
+Although we have given a rough guide, we include this section so the reader
+can see how things behave in practice. First we start off with a modified 
+gamma distribution with $\alpha=1$ and $\gamma=1/2$. The mode radius is
+set at $r_m=0.05 \mu m$ which corresponds to Deirmendjian's Haze-M model.
+We use a refractive index of $1.34-0 i$ at a wavelength of $0.45 \mu m$. This corresponds to Table T.1
+of \cite{Deirmendjian:Mybib}. An 8 point quadrature rule 
+was used on each sub-interval.
+
+The distribution function multiplied by $x^2$ is plotted below. It seems
+as though we shouldn't bother about any $x>50$, 
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=distxsq.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{ The modified gamma distribution $\times x^2$  }
+\end{figure}
+
+We first supposed that we could truncate the series after the 50th term,
+ however this produces spurious oscillations and "looks wrong". Truncating 
+at $x=100$ produces something very close to the phase function that is
+required though. Only the third significant figures change on increasing
+the cutoff, and going to higher order quadratures produces little change.
+
+The phase function corresponding the above values is plotted below.
+\vspace*{14cm}
+\begin{figure}[htb]
+\special{psfile=HazeM.ps vscale=50 hscale=50 voffset=10 hoffset=100}
+\caption{The Phase Function for Haze-M at $\lambda=0.45 \mu m$ }
+\end{figure}
+The forward scattering "spike" is typical, as are the features in the backscattering
+half of the graph. At any rate, the resulting phase function is differs
+from the tabulated values in T.1 only in the third significant figure.
+
+So, as a rough guide, figure out the value of $x$ so that $x^2$ times the pdf
+is no longer significant, double it, add 10 to it, and use that as the truncation
+ value, and you won't be far off. In the above example, stopping at $x=60$
+ and truncating after 130 terms gives a runtime of just under 3 seconds
+on a 32 bit 800MHz PC (with an 8 point Gauss quadrature). Earlier, we mentioned
+a run-time of 45 minutes. With more extreme size distributions this can be exceeded very easily. Especially where RAM is limited so that the compiler starts paging in
+virtual memory.
+ Depending on the wavelength and size distribution parameters, the calculation
+become very demanding on computing power.
+
+We find that a fairly high tolerance of 0.001, and an 8 point quadrature reproduce
+Diermendjian's results. Decreasing the tolerance to $1e-7$ and increasing the
+quadrature rule to 32 give much more accurate results. (Diermendjian simply did not
+have the processing power.) We note that in some cases, using $istop=3 x_{max}+10$
+did not change the results, but that where 
+
+Earlier, we mentioned two ways of calculating the moments by integration over angle.
+The author has not tested all ways to compare them. Comparison is dependent on the amount of RAM, the machine architecture, whether parallel processing is available, and so on. 
+Not only that, but a true comparison would require each method to be programmed to maximum
+efficiency (again depending on the machine). The author has gone for Dave's method, and
+has no inclination to code up all three methods.
+
+
+\end{flushleft}
+
+
+\bibliography{../../Mybib}
+
+\end{document}
+

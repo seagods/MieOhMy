@@ -1,0 +1,14 @@
+g++ -g -c Scalar.cpp
+g++ -g -o Scalar  Scalar.o $HOME/libs/mylib.a  $HOME/libs/libslatec.a $HOME/libs/libtoms.a  -lgfortran -lm
+
+
+g++ -g -c Vector.cpp
+g++ -g -o Vector  Vector.o $HOME/libs/mylib.a  $HOME/libs/libslatec.a $HOME/libs/libtoms.a  -lgfortran -lm
+
+g++ -g -o NormaliseS NormaliseS.cpp
+g++ -g -o NormaliseV NormaliseV.cpp
+
+
+g++ -g -o View View.cpp  $HOME/libs/mylib.a  $HOME/libs/libslatec.a $HOME/libs/libtoms.a  -lgfortran -lm
+g++ -g -o ViewVec ViewVec.cpp  $HOME/libs/mylib.a  $HOME/libs/libslatec.a $HOME/libs/libtoms.a  -lgfortran  -lm
+

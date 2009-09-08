@@ -1,0 +1,42 @@
+1.40 0.055 7.2e-6         
+0.475  0.5  0.5e-6   100.0
+8  1.0e-3
+1 1 2
+2  10
+0 2460  2524
+
+
+Input file needs
+Line 1.
+refractive index nr-i kappa, wavelength (mu m)
+Line 2.
+alpha, gamma, mode radius, Number per cc (modified gamma idist=1) 
+OR
+sigmabar, anygarbage , mode radius, Number per cc (lognormal idist=2)
+Line 3.
+npoints gauss quadrature, TOL;
+Line 4
+whether to truncate early for small x (0 or 1), whether to calculate
+ Legendre moments (0 or 1), and what distribution kind (idist is 1 or 2)
+line 5
+how to calculate if trunc_it is true (see below) (needs to be here even if trunc_it is false!)
+Line 6
+chunk chstart chstop
+chunc is 1 if only a chunk of the distribution function is required. If so the integration over x will start at chstart and stop at chstop.
+
+in terms of program variables
+
+line 1
+nr  kappa  wavelength
+line 2
+alpha  gamma  mode_rad (mu m)
+line 3
+istop, nsteps, ngauss
+line4
+trunc_it, compmoments,  idist
+line 5
+trmult, tradd  (both integers)     (itrunc=trmult*x+tradd)
+chunk chstart chstop one bool and two integers
+
+
+ 

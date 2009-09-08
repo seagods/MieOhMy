@@ -1,0 +1,6 @@
+/home/user1/daddio/local/bin/g++ -g -c View.cpp
+/home/user1/daddio/local/bin/g++ -g -o View View.o $HOME/libs/mylib.a  $HOME/libs/libslatec.a $HOME/libs/libtoms.a  $HOME/local/lib/libg2c.so.0.0.0 -lm
+
+
+
+
