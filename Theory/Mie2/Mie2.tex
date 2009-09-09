@@ -502,9 +502,9 @@ The functions $\pi_n$ and $\tau_n$ are functions of angle alone.
  Now, we could integrate over the size distributions
 over a discrete set of angles and see what the {\it scattering} function
  (or{\it  scattering} matrix) actually looks like, but in
- \cite{Vector:Mybib} the author discusses the problem of 
-multiple scattering in a radiative transfer context. Here,
- to proceed, we must have the {\it phase } function represented in
+  the problem of 
+multiple scattering in a radiative transfer context,
+  we must have the {\it phase } function represented in
  terms of Legendre Polynomials. 
 
 The reason for the emphasis is that there can be some confusion. The phase function
@@ -913,11 +913,17 @@ indication whether the code is getting there or not. The second moment is
 3 times the asymmetry parameter mentioned earlier, and is also an indicator for
 convergence. {\it However, the Legendre coefficients output by the code are the $L_k$
 of the unnormalised scattering matrix. The quantity ${\overline K_{sc}}$ is part of the 
-output, so the normalisation must be made by the user.}
+output, so the normalisation must be made by the user using the NormaliseS or NormaliseV
+codes as appropriate.}
 
-The reason for this is that it may be envisaged that the numerical integration
-may be required to done in `chunks'. This is so tha the
-This will happen if the computer on which
+The reason for not normalising is that it may be envisaged that the numerical integration
+may be required to done in `chunks'. The reason for this is that the calculating the moments
+can take a very long time time when the depending on the wavelength and the size
+distribution parameters. So, breaking up the calculation means that we cannot
+normalise for any particular `chunk'. The normalisation has to be done after using
+ one of the `Stitch' programs to join the chunks together.
+
+Splitting up the calculation will be necessary if the computer on which
 the code is run has to be switched off overnight, and the integration takes more
 time  than the `on time' of the computer. Of course, if the user has access to many
  machines over a network, or has parallel processing capability, the user can split 
@@ -933,13 +939,11 @@ So, the output files from the "Vector" program should be renamed "Vector\_part1.
 should be renamed "Scalar\_part1.dat", and so on. This renaming could be done
  manually, or in a script written by the user.
 
-
-
 There is  further code to add up all the sub integrations for the ${\overline K_{sc}}$,
  ${\overline K_{ext}}$, 
 and the ${\overline L_k}$ so as to calculate the $\Lambda_k$
 for the distribution, the extinction coefficient per metre for the distribiution, and
-the singlle scattering albedo. These are StitchS.cpp and StitchV.cpp which expect the 
+the single scattering albedo. These are StitchS.cpp and StitchV.cpp which expect the 
 input files described above. To convert to normalised Legendre coefficients, use NormaliseS or NormaliseV after the Stitch programmes have been run.
 
 
@@ -1064,17 +1068,31 @@ a value of $\overline \sigma$ of 0.475, and a mode radius of $0.5\mu m$.
 At a wavelength of $0.337 \mu m$ this has a refractive index of 1.53-0.008 $i$
  as obtainable from  HITRAN \cite{RothmanETAL:Mybib}. 
 
-The author has  a 1GHz PC with a 0.5Gbyte RAM and a Linux operating system.
- So the reader
-will see how the code performs under fairly limited circumstances at least.
+A few years back, the  author had a 1GHz PC with a 0.5Gbyte RAM and a Linux
+ operating system. So the reader
+will now see how the code performed under these fairly limited circumstances.
 
-First, we shall compute the components of the scattering matrix rather than just the scalar phase function.
+First, we computed the components of the scattering matrix rather than just the
+ scalar phase function.
 With a tolerance of 1.0e-3, the number of unit intervals for Gauss quadrature
-is 2996.  If we set $chstart$ to 2995, $chstop$ to 2996.and use a 16 point Gauss quadrature over this interval, the C clock function gives a time of 334 seconds for the integration over the unit interval. However, in reality, the time duration is much longer than this.
-There is heavy paging going on in virtual memory, and this seems to affect the C clock function. The real time duration is more like half an hour. Also, the computer slows down to a crawl for any other function, even though the priority is set to a minumum using the "nice" command. In effect, the machine is completely tied up. If the programme is run without minimising the priority, the machine is "frozen" completely. 
+is 2996.  If we set $chstart$ to 2995, $chstop$ to 2996.and use a 16 point Gauss quadrature
+ over this interval, the C clock function gave a time of 334 seconds for the 
+integration over the unit interval. However, in reality, the time duration was much longer than this.
+There was heavy paging going on in virtual memory, the C clock function
+just doesn't `tick' when paging. The real time duration was more like half an hour.
+ Also, the computer slowed down to a crawl for any other functionality, even though the priority
+ was set to a minumum using the "nice" command. In effect, the machine was completely tied up.
+ If the programme was run without minimising the priority, the machine was "frozen" completely. 
 
-The run time for the calculation is simply too much, however, if we reduce the tolerance, so that the integral of $x^2$ times the pdf is short by 0.25\% rather than 0.1\%, the 
-integration time per unit interval is reduced to about three to four minutes, and the machine does not freeze. This now requires integration over 2198 unit intervals.
+The run time for the calculation was simply too much, however, if we reduced the 
+tolerance, so that the integral of $x^2$ times the pdf was short by 0.25\% rather
+ than 0.1\%, the 
+integration time per unit interval is reduced to about three to four minutes, and the 
+machine did not freeze. This then required integration over 2198 unit intervals.
+The reduction in required RAM is just enough for the calculation to be made at all. 
+Of course, these days it is easy  to have get a machine with much more RAM and 
+a much faster clock rate as well as four processors.
+
 
 Although we have given a rough guide, we include this section so the reader
 can see how things behave in practice. First we start off with a modified 
@@ -1113,7 +1131,8 @@ is no longer significant, double it, add 10 to it, and use that as the truncatio
  value, and you won't be far off. In the above example, stopping at $x=60$
  and truncating after 130 terms gives a runtime of just under 3 seconds
 on a 32 bit 800MHz PC (with an 8 point Gauss quadrature). Earlier, we mentioned
-a run-time of 45 minutes. With more extreme size distributions this can be exceeded very easily. Especially where RAM is limited so that the compiler starts paging in
+a run-time of 45 minutes. With more extreme size distributions this can be exceeded very easily.
+ Especially where RAM is limited so that the compiler starts paging in
 virtual memory.
  Depending on the wavelength and size distribution parameters, the calculation
 become very demanding on computing power.
@@ -1121,8 +1140,7 @@ become very demanding on computing power.
 We find that a fairly high tolerance of 0.001, and an 8 point quadrature reproduce
 Diermendjian's results. Decreasing the tolerance to $1e-7$ and increasing the
 quadrature rule to 32 give much more accurate results. (Diermendjian simply did not
-have the processing power.) We note that in some cases, using $istop=3 x_{max}+10$
-did not change the results, but that where 
+have the processing power.) 
 
 Earlier, we mentioned two ways of calculating the moments by integration over angle.
 The author has not tested all ways to compare them. Comparison is dependent on the amount of RAM, the machine architecture, whether parallel processing is available, and so on. 
@@ -1134,7 +1152,7 @@ has no inclination to code up all three methods.
 \end{flushleft}
 
 
-\bibliography{../../Mybib}
+\bibliography{../Mybib}
 
 \end{document}
 
