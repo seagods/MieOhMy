@@ -37,8 +37,10 @@ done by Wiscombe in that we shall require the expansion of the scattering
 functions in Legendre polynomials. 
 This can be done analytically  instead of by using numerical integration. 
 
-For practical applications, it is common that an integration over some statistical distribution of particle distributions.
-It is often the case that this will be a skew distribution with a long tail containing large particle sizes. It is here
+For practical applications, it is common that an integration over some 
+statistical distribution of particle distributions.
+It is often the case that this will be a skew distribution with a long tail containing large
+ particle sizes. It is here
 the ripple-spike problem occurs as described in appendix-B of Wiscombe's NCAR report \cite{WisRep:Mybib}.
  Because of this, we shall investigate the sources of any possible numerical instability.
 
@@ -196,7 +198,7 @@ J_\nu(z) \sim \frac{1}{\sqrt{2 \pi \nu}}
 Here, $z$ is kept constant as $\nu$ increases
 Of course, for real arguments for instance, this does not appear to be
 of much use because of the oscillatory nature of the Bessel functions.
-For this reason, Deirmendjian concluded that "their was no practical way 
+For this reason, Deirmendjian concluded that "there was no practical way 
 of making use of them in an exact machine program".
 However, in Fig.3 we plot the ratio $J_{n-1/2}(y)/J_{n+1/2}(y)$ 
 with a real refractive index of $m=1.28$.
@@ -510,8 +512,9 @@ multiple scattering in a radiative transfer context,
 The reason for the emphasis is that there can be some confusion. The phase function
 is normalised. It would be completely wrong to integrate the Legendre
 coefficients of the phase function over the size distribution as large
- particles would be underrepresented
-by far. The scattered energy is proportional to $K_{sc}(x) x^2$. So, we must
+ particles would be under-represented by far. 
+
+The scattered energy is proportional to $K_{sc}(x) x^2$. So, we must
 calculate the Legendre coefficients of the scattering function and integrate these
 over the distribution. If $L_k(x)$ are the Legendre coefficients for the
  scattering matrix
@@ -541,7 +544,7 @@ value of $N_{max}$ might be very large indeed.
 We could multiply out the series, and integrate the quantities such as
 $a_i(x) \times b_j(x)$ and obtain the Legendre coefficients by integration over angle
 at the end of the integration over size distribution.
-However \cite{Dave1:Mybib}, as discussed in  \cite{Vector:Mybib}, J. V. Dave has 
+However \cite{Dave1:Mybib}, J. V. Dave has 
 shown that the Legendre coefficients
  may be calculated directly from the Mie $a_n$ and $b_n$ coefficients 
 without any angular numerical integration over angles 
@@ -639,13 +642,14 @@ general, increasing the imaginary part smooths out the small scale features.
 So, we can conclude that
 the "ripple-spike" problem does not appear to occur when calculating the $C$ and $D$ values
 of eqn.28. 
-However there are small scale features which are smooth and well behaved, and there 
-may well associated accuracy problems when integrating over the size distribution.
+However there are small scale features which though they are smooth and well behaved
+ when looked at closely,
+may well  have accuracy problems associated with them when integrating over the size distribution.
 
 To proceed, the integration scheme used by the author is as follows. We step 
 along the $x$ axis in intervals of $\Delta $. The author finds that $\Delta=1$
- is a reasonable value in practise. For each interval, we have  an $N_g$ point Gauss-Legendre integration
-rule, and
+ is a reasonable value in practise. For each interval, we have  an $N_g$ 
+point Gauss-Legendre integration rule, and
 for each $x$ we calculate the $C$ and $D$ vectors, the upper triangular matrices of 
 products having been initialised at zero are added to after being  
 multiplied by the weights. For instance
@@ -827,7 +831,8 @@ and write $\mu =\log_{10} r_m$ we have
 \end{equation}
 Now if we write $ {\overline \sigma} = \sigma/ln(10)$ we have the form
 \begin{equation}
-\rho(r)= \frac{ e^{ -\lbrack(\log_{10} r  -\log_{10} r_m)^2/2 \sigma^2 \rbrack} }{ln(10) r {\overline\sigma} \sqrt{2 \pi}}.
+\rho(r)= \frac{ e^{ -\lbrack(\log_{10} r  -\log_{10} r_m)^2/2
+ {\overline \sigma}^2 \rbrack} }{ln(10) r {\overline\sigma} \sqrt{2 \pi}}.
 \end{equation}
 Despite the odd looking mix of logarithms to different bases and the the number $e$,
 this is quite a natural way to present experimental data. Indeed, the distribution
@@ -871,15 +876,54 @@ over the size distributions.
 Where to truncate the series, is calculated internally. The user must supply a 
 tolerance for the accuracy of the integral of $x^2 \rho(x)$ to be calculated.
 This gives a measure of how much of the size distribution has been captured.
-The factor of $x^2$ is used because we are integrating quantities which hrow as 
-$x^2$, so the integral of $\rho$ might be very close to one, but we shall still
+The factor of $x^2$ is used because we are integrating quantities which grow as 
+$x^2$, so the integral of $\rho(x)$ might be very close to one, but we shall still
 be chopping off the tail of the distribution too early if we use this latter 
 integral  as a measure. The value of $x$ at which the tolerance is met determines
 the truncation of the Mie series at $N_{max}=v x_{max}+w$. The recommended values
 are $v=2$ and $w=10$ \cite{Dave1:Mybib} p1890. However, the user is free to increase
  either and they are part of the user input.
 
- Of course, this value could be used to truncate the series
+Unfortunately there is yet another complication. We have found that cutting off
+ when the integrals of $\rho(x)$ and $ x \rho(x)$ is not accurate enough
+ because we are integrating quantities that grow as $x^2$. However, our
+ size distributions are theoretical model distributions. We might find that for
+certain distributions, for even modest tolerences of 0.0001, we must integrate
+up to particle sizes of the order of the size of golf balls! So, we are forced
+to introduce a sensible cut-off to the distribution and renormalise it.
+
+For instance, "dust like" aerosols have a bimodal distribution. The
+larger of the two modes has a mode radius of $0.5 \mu m$, and the distribution
+is lognormal with $\sigma \approx 0.45$. If we put in a tolerance of
+$10^{-5}$ for the mean surface area, we must integrate up  particle
+sizes of $\approx 5mm$. A sensible cut of here might be $0.1mm$. This
+would not be sensible for a cloud droplet distribution with a mode radius of $10\mu m$.
+
+This seems to introduce some arbitrariness, but whether the cut-off comes
+from some physical model --- or just the users "common sense", it has to be
+there. If it were just a matter of an aerosol model (say) having the occasional
+ pea or even golf-ball sixed particle in a cubic kilometre of air, we could
+just shrug and say, well --- that's the properties of such a model distribution.
+
+Often this would be fine, especially so when the the wavelengths are long
+compared the mode radius. The values of $x$ would still be manageable
+ and the series truncation value would remain small,
+If the opposite is the case, we hit real trouble.
+It would mean that we would have Legendre series with
+tens of thousands of terms, and require the entire computing power of the planet to
+calculate them. Often we may wish to calculate a spectrum of values for
+the same distribution. It would make little sense to have no cut-off for
+infrared wavelengths, but a cut-off for ultra-violet. 
+
+So if we have a cut-off 
+for one wavelength we must have a cut-off for the all the others.
+Whatever happens we have a maximum value $nsteps$ which tells us 
+where to truncate the series. The user must explain what cut-off values
+were used and why to any user of the data. If course, if we require
+that there must not be a cut-off, we can input a cut-off so large
+that it will not be reached.
+
+ Of course, this maximum value could be used to truncate the series
 for all values of $x$, but we can gain considerable speed up if we use the same
 rule to $N=v x+w$ for each $x$. The user has an option as to whether this speed up
 is used, but the speed up is recommended.
@@ -953,7 +997,7 @@ An example is
 \begin{verbatim}
 1.3  0.02   0.5e-6         
 2.0  0.5   2e-6  100.0
-16 1e-6
+16 1e-6  0.1
 1 1 1
 2.0  10
 0 100 200
@@ -975,12 +1019,15 @@ Another thing to recall is the the value of $\sigma$ should actually be
 the value according to the transformed lognormal of eqn.50, that is
 enter ${\overline \sigma}$ rather than $\sigma$.  
 
-The third line consists of two numbers. The first is the order of gauss quadrature
+The third line consists of three numbers. The first is the order of gauss quadrature
 for integration over each subinterval of the size distribution. The second
  number is the tolerance as 
 discussed in the previous section. Decreasing this will increase the cutoff in $x$
 and increase the the maximum truncation value for the size distribution (called $istop$
-in the actual code).
+in the actual code). Lastly, there is the value of the cut-off in the size distribution.
+This is entered in millimetres. I have chosen this strange discrepency in units
+because if there is no {\it physical} reason for the cut-off, we have an easy feel
+for the size in everyday life.
  
 
 The fourth line consists of two boolean variables, and an option number.
@@ -999,19 +1046,24 @@ integers, and the values of 2 and 10 are recommended as stated above.
 
 The last line consists of a bool which tells the code whether the the integration
 is to be split up into chunks or not. If it is not to be split up, the value
-of $istep$ shall run from zero to $nsteps$, which is where the tail of the distribution
+of $istep$ shall run from zero to $nsteps$, which is where the tail of the 
+distribution
 is cut off according to the value of the tolerance. Nonetheless, two integers are
 required next, and these shall be overwriten with zero and $nsteps$ internally.
 
 If the integration is to be split up, then $istep$ will run from the first integer
 ($chstart$) up to the second integer ($chstop$). The value of $chstop$ for the
-last chunk where the tail of the distripbution should be $nsteps$. The user will
+last chunk where the tail of the distribution should be $nsteps$. The user will
 know what this value is from experimenting with the tolerance, which outputs
-the value of $nsteps$ to the screen.
+the value of $nsteps$ to the screen. (Note both these integers need to be
+there if the calculation is {\it not} to split up in this way. They will be
+ignored. Set them to something like "-1000" so when you look at the input files
+you know the numbers mean nothing.
 
 Please note that {\it there are no safety belts}, that is the program will just
-crash and burn if there is any inconsistency in the input, or worse still produce
-believable looking garbage. It is entirely up to the user to understand the input 
+crash and burn if there is any inconsistency in the input, or worse still
+ produce believable looking garbage. It is entirely up to the user to 
+understand the input 
 and get it right, or when writing a script to call the program, to get their own script
 right for all circumstances.
 
@@ -1041,7 +1093,8 @@ the output.)
 
 The following lines are the Legendre moments of the scattering matrix
 or scattering function in the scalar case.  These are in order, one per 
-line or four per line for the vector case. If there are many files, one per chunk,
+line or four per line for the vector case.
+ If there are many files, one per chunk,
 then these numbers must all be added to make one final output file.
 
 Once we have the single output file, we can find the moments

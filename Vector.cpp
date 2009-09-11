@@ -104,6 +104,8 @@ int main(){
 
     double sigmabar;
 
+    bool verbose=true;
+
     //COMPUTATIONAL PARAMETERS
 
     int ngauss, nsteps;
@@ -114,12 +116,14 @@ int main(){
     int itrunc,itrunc1;
     int i_newtrunc;
     int idist;
-    double TOL;
+    double TOL, CUTOFF;
+    bool chopped=false;
     int tradd, trmult;
 
     fp_in >> realindex >> imagindex >> lambda;   
     fp_in >> alpha_MGD >>  gamma_MGD >> radmode >> Numberdens;   
-    fp_in >> ngauss >> TOL;   
+    fp_in >> ngauss >> TOL >> CUTOFF;   
+    CUTOFF=CUTOFF/1000.0;  // CUTOFF was in mm to get good grasp of what it means!
     fp_in >> trunc_it >> calcmoments >> idist;   
     fp_in >> trmult >> tradd;   
     fp_in >> chunk  >> chstart >> chstop;   
@@ -271,6 +275,7 @@ int main(){
      // cout << "x=" << ex << " error=" << error << endl;
 
       nsteps+=1;
+
       if(oldAreacheck==Areacheck2){
          cout << "Gauss quadrature rule does not appear to be fine enough" << endl;
          cout << "to integrate distribution function to accuracy specified by TOL."
@@ -278,12 +283,20 @@ int main(){
          cout << "Either increase TOL or increase ngauss " << endl;
          return 1;
       }
+      if(1./kay*nsteps > CUTOFF){
+        cout <<  "Reached cuttoff at nsteps=" << nsteps << endl;
+        printf(" distfuncheck has reached %0.9e \n", distfuncheck/kay);
+        chopped=true;
+        break;
+      }
 
-    }
+    }  //end while loop
 
     radcheck=radcheck/kay/kay;
     Areacheck=Areacheck/kay/kay/kay*4.*pi;
     Volcheck=Volcheck/kay/kay/kay/kay*4.0/3.0*pi;
+
+    double distfunnorm=distfuncheck/kay;
 
     cout << "nsteps=" << nsteps << endl;
 
@@ -365,7 +378,8 @@ int main(){
 
 
     for(int istep=chstart; istep<chstop; istep++){
-    cout << istep << "  " << nsteps << " start timing now" << endl;
+    if(verbose)cout << istep << "  " << nsteps << " start timing now" << endl;
+    cout << "radius= "  << istep*1.0/kay <<  endl;
     time_start=clock();
     for(int ng=0;ng < ngauss; ng++){
       ex=istep*1.0+X[ng];
@@ -394,6 +408,7 @@ int main(){
           logarg=difflog*difflog/2.0/sigmabar/sigmabar;
           distfun=exp(-logarg)/ln10/currentrad/sigmabar/roottwopi;
       }
+      distfun=distfun/distfunnorm;
       
 
 
@@ -435,7 +450,7 @@ int main(){
        }  //endif calcmoments;
     } //end ng loop;
     time_end=clock();
-    cout << "time for one istep=" << (time_end-time_start)/CLOCKS_PER_SEC << endl;
+    if(verbose)cout << "time for one istep=" << (time_end-time_start)/CLOCKS_PER_SEC << endl;
     } //end istep loop;
    //note factor 1/kay for x=2 pi r/lambda not included
 
@@ -612,6 +627,9 @@ int main(){
     // Diagnostic output
     cout << "Numerical Area under integrated distribution function" << endl;
     cout << "distfuncheck=" << distfuncheck/kay << endl;
+    if(chopped){
+         cout << "Truncation was used when radius reached " << CUTOFF*1000.0 << "mm\n";
+         cout << "Normalisation factor << " << distfunnorm << " was used\n";}
 
     cout << "Numerical and analytical mean radius" << endl;
     cout << "radcheck=" << radcheck << "  meanRad=" << meanRad << endl;
@@ -633,11 +651,11 @@ int main(){
     // single scattering albedo
     ssa=Ksca_bar/Kext_bar;
 
-    fprintf(fp2, "%0.6e  %lf  %lf \n", radmode, alpha_MGD, gamma_MGD);
-    fprintf(fp2, "%lf  %lf  %0.6e \n", realindex, imagindex,lambda);
+    fprintf(fp2, "%0.8e  %lf  %lf \n", radmode, alpha_MGD, gamma_MGD);
+    fprintf(fp2, "%lf  %lf  %0.8e \n", realindex, imagindex,lambda);
     fprintf(fp2, "%lf  %lf  %lf %lf %lf  \n", beta_s, ssa, Ksca_bar, Kext_bar, Numberdens/1e6);
-    fprintf(fp2, "%0.6e  %0.6e  %0.6e   \n", meanRad, meanArea, meanVol);
-    fprintf(fp2,"%d %d \n", nsteps, istop, chstart, chstop);
+    fprintf(fp2, "%0.8e  %0.8e  %0.8e   \n", meanRad, meanArea, meanVol);
+    fprintf(fp2,"%d %d %d %d\n", nsteps, istop, chstart, chstop);
 
     if(calcmoments){
     for(int i=0; i < istop; i++)
