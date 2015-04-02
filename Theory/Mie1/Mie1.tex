@@ -1,4 +1,4 @@
-\documentstyle[12pt]{article}
+\documentclass[12pt]{article}
 \setlength{\textheight}{9.80in}
 \setlength{\textwidth}{6.40in}
 \setlength{\oddsidemargin}{0.0mm}
@@ -9,22 +9,32 @@
 \newtheorem{defn}{Definition}
 \renewcommand{\baselinestretch}{1.2}
 
+\usepackage{amsmath}
+
+%\bibliographystyle{prsty}
+%% Here we are using biblatex rather than bibtex
+\usepackage[backend=bibtex, sorting=none]{biblatex} %Without sorting=none we get alphaphetical
+\bibliography{../Miebib.bib}
+%\bibliographystyle{prsty}
+
+
 \begin{document}
 
-\bibliographystyle{prsty}
+
 
 
 \thispagestyle{empty}
 
 \title{Electromagnetic Scattering from a Sphere}
 \author{Chris Godsalve}
+\date{July, 11, 2007}
 \maketitle
 
 \tableofcontents
 
 \section{Foreword}
 
-My purpose in writing this article is to write up some of my own notes. 
+My purpose in writing this article\footnote{updated 2nd April 2015} is to write up some of my own notes. 
 Why publish it on the Net? Of course, I could lose my notes by some 
 accident, and then I should not be able to refer to them. However, if some
 reader happens upon them, and is interested in the subject, it may (or may not)
@@ -36,7 +46,7 @@ In the afterword, the reader is directed to a National Centre for Atmospheric Re
 
 The subject of electromagnetic scattering from a sphere has a long history. The completely general solution was beyond some of the best known 19th century mathematicians and physicists involved in the field. It was not until 1908 that Gustav  Mie solved the problem for electromagnetic  scattering from metal spheres, and Ludwig Lorenz, and Peter Debye managed a completely general solution. The solution for the theory of electromagnetic radiation from a sphere is now usually called the Mie theory, or sometimes the Mie-Lorenz theory. These days, the subject is of much interest to anyone working in the field of atmospheric radiation, but the theory is also important in other fields of research.
 
-Of course, the basis of the study lies in Maxwell's equations. However, we are still greatly indebted to Heaviside for casting Maxwell's equations in vector form. The basis of the treatment given here is based on Liou's book on atmospheric radiation \cite{Liou:Mybib}. However, there are alterations, additions, and changes in the order of argument given here. Also, further material is included from  a book by Deirmendjian \cite{Deirmendjian:Mybib}. Reprints of the latter are available from {\it RAND}. Just Google on RAND reprints and Deirmendjian to order a copy if required.
+Of course, the basis of the study lies in Maxwell's equations. However, we are still greatly indebted to Heaviside for casting Maxwell's equations in vector form. The basis of the treatment given here is based on Liou's book on atmospheric radiation \cite{Liou:Miebib}. However, there are alterations, additions, and changes in the order of argument given here. Also, further material is included from  a book by Deirmendjian \cite{Deirmendjian:Miebib}. Reprints of the latter are available from {\it RAND}. Just Google on RAND reprints and Deirmendjian to order a copy if required.
 
 \section{Maxell's Equations}
 
@@ -75,7 +85,7 @@ c^2 \nabla \times {\bf B}=\frac{\partial {\bf E}}{\partial t}
 }{\epsilon_0}.
 \end{equation}
 Here ${\bf J}_e$ is the current due to conduction. For a good discussion on this
-see \textsection 36 of the Feynman Lectures on Physics (volume 2) \cite{FeynLect:Mybib}.
+see \textsection 36 of the Feynman Lectures on Physics (volume 2) \cite{FeynLect:Miebib}.
 
 \begin{equation}
 c^2 \nabla \times \left \lbrack
@@ -387,7 +397,7 @@ First, we shall consider eqn.50. On putting $\mu=\cos \theta$, this becomes
 \frac{d}{ d \mu} (1-\mu^2) \frac{ d \Theta}{d \mu}
 + \left \lbrack const=\frac{l^2}{1 -\mu^2} \right \rbrack=0.
 \end{equation}
-The value of this constant is entirely arbitrary, and if we compare this with the associated Legendre differential equation \cite{AbramowitzStegun:Mybib}
+The value of this constant is entirely arbitrary, and if we compare this with the associated Legendre differential equation \cite{AbramowitzStegun:Miebib}
 \begin{equation}
 \frac{d}{ d x} (1-x^2) \frac{ d y}{d x}
 + \left \lbrack m(m+1)-\frac{l^2}{1 -x^2} \right \rbrack=0.
@@ -396,7 +406,7 @@ We choose our constant so to be $m(m+1)$ (remember that the complete solution wi
 \begin{equation}
 \Theta(\theta)=P^m_l(\cos \theta),
 \end{equation}
-where the $P^m_L$ are the associated Legendre functions, which are well documented in \cite{AbramowitzStegun:Mybib}.
+where the $P^m_L$ are the associated Legendre functions, which are well documented in \cite{AbramowitzStegun:Miebib}.
 
 We now turn our attention to $R(r)$. If we put
 \begin{equation}
@@ -415,7 +425,7 @@ the radial equation can be written
 This is Bessel's equation, and the solutions are Bessel functions of
 the first,  second, and third  kind. These are also well documented in
 \textsection 9 and \textsection 10 of Abramowitz and Stegun 
-\cite{AbramowitzStegun:Mybib}.
+\cite{AbramowitzStegun:Miebib}.
 The Bessel functions of the first and second kinds are usually denoted by
 $J_\nu$ and $Y_\nu$ respectively. In our case $\nu=m+1/2$ where $m$ is an integer. Some authors refer to the Bessel functions of the second kind as Neumann functions, and denote them as $N_\nu$. Bessel functions of the third kind are also
 called Hankel functions, and these can be written as $H_\nu=J_\nu+i Y_\nu$.
@@ -799,7 +809,7 @@ $$       $$
 Here the subscripts $u$ and $v$ have the meaning that the generating functions
 are $u$ and $v$.
 
-Now,  we have an incident plane wave, this will be written in terms of an infinite series in the same form as the general solution. It turns out, that there is a formula due to Bauer that enables us to do just this \cite{Watson:Mybib}.
+Now,  we have an incident plane wave, this will be written in terms of an infinite series in the same form as the general solution. It turns out, that there is a formula due to Bauer that enables us to do just this \cite{Watson:Miebib}.
 
 Our incident plane wave is to be written down first.
 \begin{equation}
@@ -874,7 +884,7 @@ $$ and   $$
 E^i_\phi +E^i_\phi=E^t_\phi,
 \end{equation}
 
-and the other usual boundary conditions at an interface (see \textsection 33 of \cite{FeynLect:Mybib}. This leads to
+and the other usual boundary conditions at an interface (see \textsection 33 of \cite{FeynLect:Miebib}. This leads to
 \begin{equation}
 u^u+u^s=mu^t, \> \> v^i+v^s=v^t,
 \end{equation}
@@ -975,7 +985,7 @@ There are a few important relations that allow us to calculate these functions e
 \begin{equation}
 \tau_n(\mu)=\mu \pi_n(\mu)-(1-\mu^2) \frac{d}{d \mu} \pi_n(\mu).
 \end{equation}
-From the theory of Legendre Polynomials \cite{AbramowitzStegun:Mybib} we have
+From the theory of Legendre Polynomials \cite{AbramowitzStegun:Miebib} we have
 \begin{equation}
 P_n(\mu)=\frac{1}{2^n n!} \frac{d^n}{d \mu^n} (\mu^2-1)^n.
 \end{equation}
@@ -1003,8 +1013,14 @@ $$ and $$
 Now we return to eqn.121 and eqn.122 which define the scattering functions.
 In matrix form, we write these as
 \begin{equation}
-\pmatrix{ E^s_l \cr E^s_r}= \pmatrix{ S_1 & 0 \cr 0 & S_2 } 
-\pmatrix{ E^i_l \cr E^s_r}.
+\begin{pmatrix}
+ E^s_l \\ E^s_r
+\end{pmatrix}= 
+\begin{pmatrix}
+ S_1 & 0 \\ 0 & S_2 
+\end{pmatrix} 
+\begin{pmatrix} E^i_l \\ E^s_r
+\end{pmatrix}.
 \end{equation}
 We will be interested in the scattered energy rather than the fields themselves,that is 
 \begin{equation}
@@ -1014,18 +1030,19 @@ i_2=k^2 A_2 A^*_2= S_2 S^*_2,
 \end{equation}
  where as usual the asterisk denotes the complex conjugate.
 
-Now, there may well be phase differences between the parallel and perpendicular fields, and this will lead to the possibility of elliptical or circular polarisation. In which case we must describe the incident and scattered intensities in terms of the Stokes' parameters (see for instance \textsection 15 of Chandrasekhar's Radiative Transfer \cite{Chandrasekhar:Mybib}. A section on the Stokes's parameters is also given in Deirmendjian \cite{Deirmendjian:Mybib} or any standard optics textbook such as Born and Wolf's Principles of Optics \cite{BornWolf:Mybib}.
+Now, there may well be phase differences between the parallel and perpendicular fields, and this will lead to the possibility of elliptical or circular polarisation. In which case we must describe the incident and scattered intensities in terms of the Stokes' parameters (see for instance \textsection 15 of Chandrasekhar's Radiative Transfer \cite{Chandrasekhar:Miebib}. A section on the Stokes's parameters is also given in Deirmendjian \cite{Deirmendjian:Miebib} or any standard optics textbook such as Born and Wolf's Principles of Optics \cite{BornWolf:Miebib}.
 
 When cast in these terms we have
 \begin{equation}
-\pmatrix{ I^s_l \cr I^s_r \cr U^s \cr V^s }
-= \pmatrix{
+\begin{pmatrix} I^s_l \cr I^s_r \cr U^s \cr V^s 
+\end{pmatrix}
+= \begin{pmatrix}
     A_1 A^*_1 & 0 & 0 & 0 \cr
     0 & A_2 A^*_2 & 0 & 0 \cr
     0 & 0 & Re(A_1 A^*_2) & -Im( A_1 A^*_2) \cr
     0 & 0 & Im(A_1 A^*_2) & Re( A_1 A^*_2) 
-}
-\pmatrix{ I^i_l \cr I^i_r \cr U^i \cr V^i }
+\end{pmatrix}
+\begin{pmatrix} I^i_l \cr I^i_r \cr U^i \cr V^i \end{pmatrix}
 \end{equation}
 The Poynting Vector ${\bf P}$ describes energy fluxes, 
 \begin{equation}
@@ -1080,14 +1097,14 @@ P_j(\theta)=\frac{ 4 i_j(\theta)}{x^2 K_{sc}(x)}
 \end{equation}
 And in these terms the scattering rule
 \begin{equation}
-\pmatrix{ I^s_l \cr I^s_r \cr U^s \cr V^s }
-=  \frac{\pi a^2 K_{sc} }{ 4\pi} \pmatrix{
+\begin{pmatrix} I^s_l \cr I^s_r \cr U^s \cr V^s \end{pmatrix}
+=  \frac{\pi a^2 K_{sc} }{ 4\pi} \begin{pmatrix}
     P_1 & 0 & 0 & 0 \cr
     0 & P_2 & 0 & 0 \cr
     0 & 0 & P_3  & P_4 \cr
     0 & 0 & -P_4 &  P_3
-}
-\pmatrix{ I^i_l \cr I^i_r \cr U^i \cr V^i }.
+\end{pmatrix}
+\begin{pmatrix} I^i_l \cr I^i_r \cr U^i \cr V^i \end{pmatrix}.
 \end{equation}
 For many applications, only {\it the scalar phase function} $P(\theta) $ is needed, where
 \begin{equation}
@@ -1111,6 +1128,297 @@ g= \frac{4}{ x^2 K_{sc}} \sum_{n=1}^{N} \left \lbrack
 Note that this relies on a finite expansion, so that $a_{N+1}=b_{N+1}$ is defined as zero, which 
 gives rise to the second expression.
 
+\section{Dave's Transformation to Legendre Polynomial Coeffiecients}
+
+Now given the Mie coefficients, Dave \cite{Dave1:Miebib} has shown it is 
+possible to calculate directly the Legendre Polynomial expansions
+for instance 
+\begin{equation}
+M_2= \sum_{k=1}^\infty L^{(1)} _k P_{k-1}(  \cos \Theta).
+\end{equation}
+The coefficients for $M_2$, $S_{21}$ and $D_{21}$ shall be denoted  by superscripts 2, 3 and 4 respectively.
+
+\begin{equation}
+L^{1}_k=(k-1/2) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( D_p D_q^*)
+$$  $$
+L^{2}_k=(k-1/2) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( C_p C_q^*)
+$$  $$
+L^{3}_k=(k/2-1/4) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Re( C_p D_q^* + C_p^* D_q)
+$$  and $$
+L^{4}_k=(k/2-1/4) \sum_{m=k^\prime}^\infty A_m^{k-1} \sum_{i=0}^{k^\prime} B^{k-1}_i \Delta{ik}
+ \times Im( C_p D_q^* - C_p^* D_q)
+\end{equation}
+The results are cumbersome, but the relations between the $C$ and $D$ and the Mie coefficients and
+the values of the  coefficients A and B shall be given below. Beforehand we note that 
+$k^\prime=(k-1)/2$ for odd $k$ and $(k-2)/2$, for even $k$, $q=m+i+1+\delta$ where $\delta=0$ for odd
+values of $k$ and is unity for even $k$. Also  for odd $k$, $\Delta$ is 1 if $i=0$ and 2 otherwise, and  for even $k$
+$\Delta=2$. Also, $p=m-i+1$.
+
+Now, if the Mie coefficients are denoted $a$ and $b$
+\begin{equation}
+C_k=\frac{1}{k}(2k-1)(k-1)b_{k-1}
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack a_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack b_{p+1} \right \rbrace
+$$ and $$
+D_k=\frac{1}{k}(2k-1)(k-1)a_{k-1}
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack b_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack a_{p+1} \right \rbrace,
+\end{equation}
+where $p=k+2i-2$ for the equations for $C$ and $D$..
+Finally, the coefficients $A$ and $B$ are also cumbersome. First we consider odd values of
+$k$. For $m=k^\prime$ and $i=1$
+\begin{equation}
+A_{(k-1)/2}^{k-2}=\frac{4(k-1)(k-2)}{(2 k-1)(2k-3)}
+A_{(k-2)/2}^{k-2}
+$$ and $$
+B_0^{k-1} =\left ( \frac{(k-2}{k-1} \right )^2 B_0^{k-2}.
+\end{equation}
+For $k=1$, $A_0^0=2, \> B^0_0=1$, after which
+for $m>k^\prime$
+\begin{equation}
+A^{k-1}_m=\frac{(2m-k)(2m+k-1)}{(2m+k)(2m-k+1)} A_{m-1}^{k-1}.
+\end{equation}
+For  $i>0$
+\begin{equation}
+B_i^{k-1} =\frac{(k-2i+1)(k+2i-2)}{(k-2i)(k+2i-1)}B_{i-1}^{k-1}.
+\end{equation}
+
+For even $k>2$ we start with $m=k^\prime$ and $i=0$ and use
+\begin{equation}
+A_{(k-2)}^{k-1}=\frac{4(k-1)(k-2)}{(2k-1)(2k-3)}A_{(k-4)/2}^{k-2}
+$$ and   $$
+B_0^{k-1}=\frac{(k-1)(k-3)}{k(k-2)} B_0^{k-3}.
+\end{equation}
+We have, for $k=2$,  $A_0^1=4/3$, and $B_0^1=1/2$. Then for for $m>k^\prime$
+\begin{equation}
+A^{k-1}_m= \frac{(2m-k+1)(2m+k)}{(2m+k+1)(2m -k+2)}A_{m-1}^{k-1}.
+\end{equation}
+Again, for $i>0$
+\begin{equation}
+B_i^{k-1}=\frac{(2i+k-1)(2i-k)}{(2i-k+1)(2i+k)}B_{i-1}^{k-1}.
+\end{equation}
+
+
+It was shown by Sekera, that it is necessary to replace $M_1, M_2, S_{21}$ and $D_{21}$
+ by four new quantities defined by the relations
+\begin{equation}
+M_2=R_1+ {\cos}^2 \Theta R_2 +2 {\cos}\Theta R_3,
+$$    $$
+M_1=R_2+ {\cos}^2 \Theta R_1 +2 {\cos}\Theta R_3,
+$$   $$
+S_{21}={\cos} \Theta ( R_1+  R_2) +(1+ {\cos}^2\Theta) R_3,
+$$   and $$
+D_{21}=(1- {\cos}^2\Theta) R_4.
+\end{equation}
+For each $R_j({\cos} \Theta)$ we have an expansion in Legendre polynomials, where the coefficients are given by eqn.19, except that the $C$s and $D$s are no longer given by eqn.20. In fact, they are now
+
+\begin{equation}
+C_k= \frac{1}{k+1}(1-2k)(1+2k)b_{k-1}
+$$   $$
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack (2k+2i-1)i a_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack(k+i)(2i+1) b_{p+1} \right \rbrace
+$$ and $$
+D_k=\frac{1}{k+1}(2k-1)(k-1)b_{k-1}
+$$   $$
++(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack (2k+2i-1)ib_p
+- \left \lbrack \frac{1}{p+1}+\frac{1}{p+2} \right \rbrack (k+i)(2i+1) a_{p+1} \right \rbrace,
+\end{equation}
+and $p$ is now given by $p=k+2i-1$.
+After the addition theorem is applied we have the Fourier series expansions
+\begin{equation}
+R_j=\sum_{n=1}^\infty F_n^{(j)}(\mu,\mu^\prime){\cos} (n-1)(\phi^\prime-\phi),
+\end{equation}
+where $j$ runs from 1 to four.
+Later, we also find that we require four more related sets of four expansions: namely
+\begin{equation}
+R_j { \cos}(\phi^\prime-\phi)
+ =\sum_{n=1}^\infty F_n^{(j)}(\mu,\mu^\prime,1c){\cos} (n-1)(\phi^\prime-\phi),
+\end{equation}
+\begin{equation}
+R_j { \cos}2(\phi^\prime-\phi)
+ =\sum_{n=1}^\infty F_n^{(j)}(\mu,\mu^\prime,2c){\cos} (n-1)(\phi^\prime-\phi),
+\end{equation}
+\begin{equation}
+R_j { \sin}(\phi^\prime-\phi)
+ =\sum_{n=1}^\infty F_n^{(j)}(\mu,\mu^\prime,1s){\sin} (n-1)(\phi^\prime-\phi),
+\end{equation}
+and
+\begin{equation}
+R_j { \sin}2(\phi^\prime-\phi)
+ =\sum_{n=1}^\infty F_n^{(j)}(\mu,\mu^\prime,2s){\sin} (n-1)(\phi^\prime-\phi).
+\end{equation}
+The coefficients for these series can be expressed as follows. For the first three
+terms we have
+\begin{equation}
+F_1^{(j)}(\mu,\mu^\prime,1c)={1 \over 2} F_2^{(j)}(\mu,\mu^\prime)
+$$    $$
+F_2^{(j)}(\mu,\mu^\prime,1c)=F_1^{(j)}(\mu,\mu^\prime)+{1 \over 2} F_3^{(j)}(\mu,\mu^\prime)
+$$    $$
+F_1^{(j)}(\mu,\mu^\prime,2c)={1 \over 2} F_3^{(j)}(\mu,\mu^\prime)
+$$    $$
+F_2^{(j)}(\mu,\mu^\prime,2c)={1 \over 2} \lbrack F_2^{(j)}(\mu,\mu^\prime)+ F_4^{(j)}(\mu,\mu^\prime) \rbrack
+$$    $$
+F_3^{(j)}(\mu,\mu^\prime,2c)=F_1^{(j)}(\mu,\mu^\prime)+{1 \over 2} F_5^{(j)}(\mu,\mu^\prime).
+\end{equation}
+Similarly we have 
+\begin{equation}
+F_1^{(j)}(\mu,\mu^\prime,1s)=0
+$$    $$
+F_2^{(j)}(\mu,\mu^\prime,1s)=F_1^{(j)}(\mu,\mu^\prime)-{1 \over 2} F_3^{(j)}(\mu,\mu^\prime)
+$$    $$
+F_1^{(j)}(\mu,\mu^\prime,2s)=0
+$$    $$
+F_2^{(j)}(\mu,\mu^\prime,2s)={1 \over 2}\lbrack F_2^{(j)}(\mu,\mu^\prime)- F_4^{(j)}(\mu,\mu^\prime) \rbrack
+$$    $$
+F_3^{(j)}(\mu,\mu^\prime,2s)=F_1^{(j)}(\mu,\mu^\prime)-{1 \over 2} F_5^{(j)}(\mu,\mu^\prime).
+\end{equation}
+For higher expansion coefficients we have the general formula
+\begin{equation}
+F_n^{(j)}(\mu,\mu^\prime,q(c/s))={1 \over 2}\lbrack F_{n-q}^{(j)}(\mu,\mu^\prime)\pm F_{n+q}^{(j)}(\mu,\mu^\prime) \rbrack.
+\end{equation}
+Armed with these quantities, we can express the transformed Fourier series
+\begin{equation}
+M_{ij}(\mu,\mu^\prime,\phi^\prime-\phi)=\sum_{n=1}^\infty M_{ij}^n(\mu,\mu^\prime)
+{\cos}(n-1)(\phi^\prime-\phi),
+\end{equation}
+for $ij=11, 12, 21, 22, 33, 34, 43, 44$. For the other $ij$
+\begin{equation}
+M_{ij}(\mu,\mu^\prime,\phi^\prime-\phi)=\sum_{n=1}^\infty M_{ij}^n(\mu,\mu^\prime)
+{\sin}(n-1)(\phi^\prime-\phi).
+\end{equation}
+
+After multiplying out eqn.13, and identifying products and cross products of eqns.14-17
+we find, after a considerable amount of very tedious algebra (believe me, I checked it), we find
+the same results as found by Dave \cite{Dave1:Miebib} for the
+elements of the transformed matrix. Using the abbreviation $\gamma=\sqrt{(1-\mu^2)
+(1-\mu^{\prime \> 2}) }$, the results are as follows.
+\begin{equation}
+M_{11}^{(n)}(\mu, \mu^\prime)={1\over 2} F_n^{(1)}(\mu, \mu^\prime)+
+$$     $$
+\lbrack \gamma^2(\mu, \mu^\prime)+{1\over 2} \mu^2 \mu^{\prime \>2} \rbrack 
+F_n^{(2)}(\mu, \mu^\prime) + \mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime)
+$$     $$
++ 2 \gamma(\mu, \mu^\prime) \lbrack \mu \mu^\prime F_n^{(2)}(\mu, \mu^\prime,1c)
++F_n^{(3)}(\mu, \mu^\prime,1c) \rbrack+ {1\over 2} F_n^{(1)}(\mu, \mu^\prime,2c)
+$$      $$
++ {1\over 2} \mu^2 \mu^{\prime \> 2} F_n^{(2)}(\mu, \mu^\prime,2c)
++{1\over 2} \mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime,2c)
+\end{equation}
+\begin{equation}
+M_{12}^{(n)}(\mu, \mu^\prime)={1\over 2} \mu^{\prime \>2} F_n^{(1)}(\mu, \mu^\prime)
++{1\over 2} \mu^2 F_n^{(2)}(\mu, \mu^\prime)+\mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime)
+$$    $$
+-{1\over 2} \mu^{\prime \>2} F_n^{(1)}(\mu, \mu^\prime,2c)
+-{1\over 2} \mu^2 F_n^{(2)}(\mu, \mu^\prime,2c)-\mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime,2c)
+\end{equation}
+\begin{equation}
+M_{13}^{(n)}(\mu, \mu^\prime)=\gamma(\mu, \mu^\prime) \lbrack
+\mu  F_n^{(2)}(\mu, \mu^\prime,1s)+\mu^\prime  F_n^{(3)}(\mu, \mu^\prime,1s) \rbrack
+$$     $$
++{1\over 2} \mu^\prime \lbrack F_n^{(1)}(\mu, \mu^\prime,2s)+
+\mu^{2} F_n^{(2)}(\mu, \mu^\prime,2s) \rbrack
++{1\over 2} \mu (1+\mu^{\prime \> 2} ) F_n^{(3)}(\mu, \mu^\prime,2s) 
+\end{equation}
+\begin{equation}
+M_{14}^{(n)}(\mu, \mu^\prime)= \mu^\prime \gamma(\mu, \mu^\prime)
+ F_n^{(4)}(\mu, \mu^\prime,1s)-{1\over 2} \mu (1-\mu^{\prime \> 2} ) F_n^{(4)}(\mu, \mu^\prime,2s)
+\end{equation}
+\begin{equation}
+M_{21}^{(n)}(\mu, \mu^\prime)= M_{12}^{(n)}(\mu^\prime, \mu)
+\end{equation}
+\begin{equation}
+M_{22}^{(n)}(\mu, \mu^\prime)=
+ \lbrack \gamma^2(\mu, \mu^\prime)+{1\over 2} \mu^2 \mu^{\prime \> 2} \rbrack
+ F_n^{(1)}(\mu, \mu^\prime) 
+$$     $$+ {1\over 2} F_n^{(2)}(\mu, \mu^\prime) 
++\mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime)
+$$      $$
++2 \gamma(\mu, \mu^\prime) \lbrack
+ \mu \mu^\prime F_n^{(1)}(\mu, \mu^\prime, 1c)+F_n^{(3)}(\mu, \mu^\prime, 1c) \rbrack
+$$     $$
++{1\over 2} \mu^2\mu^{\prime \> 2} F_n^{(1)}(\mu, \mu^\prime, 2c)
++{1\over 2}  F_n^{(2)}(\mu, \mu^\prime, 2c) +\mu \mu^\prime F_n^{(3)}(\mu, \mu^\prime, 2c)
+\end{equation}
+\begin{equation}
+M_{23}^{(n)}(\mu, \mu^\prime)=-\gamma(\mu, \mu^\prime) \lbrack 
+ \mu F_n^{(1)}(\mu, \mu^\prime, 1s)+\mu^\prime F_n^{(3)}(\mu, \mu^\prime, 1s) \rbrack
+$$      $$
+-{1\over 2} \mu^\prime \lbrack \mu^2  F_n^{(1)}(\mu, \mu^\prime, 2s)
+ +F_n^{(2)}(\mu, \mu^\prime, 2s) \rbrack
+-{1\over 2} \mu (1+ \mu^{\prime \> 2}) F_n^{(3)}(\mu, \mu^\prime, 2s)
+\end{equation}
+\begin{equation}
+M_{24}^{(n)}(\mu, \mu^\prime)= -M_{14}^{(n)}(\mu, \mu^\prime)
+\end{equation}
+\begin{equation}
+M_{31}^{(n)}(\mu, \mu^\prime)= -2 M_{13}^{(n)}(\mu^\prime, \mu)
+\end{equation}
+\begin{equation}
+M_{32}^{(n)}(\mu, \mu^\prime)= -2 M_{23}^{(n)}(\mu^\prime, \mu)
+\end{equation}
+\begin{equation}
+M_{33}^{(n)}(\mu, \mu^\prime)=
+{3\over 2} \gamma^2(\mu, \mu^\prime)F_n^{(3)}(\mu, \mu^\prime)
+$$    $$
++\gamma(\mu, \mu^\prime) \lbrack F_n^{(1)}(\mu, \mu^\prime,1c)+ F_n^{(2)}(\mu, \mu^\prime,1c) \rbrack 
+$$      $$
++2 \mu \mu^\prime \gamma(\mu, \mu^\prime) F_n^{(3)}(\mu, \mu^\prime,1c)
++ \mu \mu^\prime \lbrack F_n^{(1)}(\mu, \mu^\prime,2c)+F_n^{(2)}(\mu, \mu^\prime,2c) \rbrack
+$$      $$
+ + {1\over 2} (1+\mu^2)(1+\mu^{\prime \> 2})F_n^{(3)}(\mu, \mu^\prime,2c)
+\end{equation}
+\begin{equation}
+M_{34}^{(n)}(\mu, \mu^\prime)=
+\lbrack \gamma^2(\mu, \mu^\prime)-{1\over2 }(1+\mu^{\prime \> 2})(1-\mu^2) \rbrack
+F_n^{(4)}(\mu, \mu^\prime)
+$$       $$
++2 \mu \mu^\prime \gamma(\mu, \mu^\prime) F_n^{(4)}(\mu, \mu^\prime,1c)
+-(1-\mu^{\prime \> 2})(1+\mu^2)F_n^{(4)}(\mu, \mu^\prime,2c)
+\end{equation}
+\begin{equation}
+M_{41}^{(n)}(\mu, \mu^\prime)= 2M_{14}^{(n)}(\mu^\prime, \mu)
+\end{equation}
+\begin{equation}
+M_{42}^{(n)}(\mu, \mu^\prime)= -M_{41}^{(n)}(\mu, \mu^\prime)
+\end{equation}
+\begin{equation}
+M_{43}^{(n)}(\mu, \mu^\prime)= - M_{34}^{(n)}(\mu^\prime, \mu)
+\end{equation}
+\begin{equation}
+M_{44}^{(n)}(\mu, \mu^\prime)=
+ \mu \mu^\prime \lbrack F_n^{(1)}(\mu, \mu^\prime)+ F_n^{(2)}(\mu, \mu^\prime) \rbrack
+$$      $$
++ \lbrack  \gamma^2(\mu, \mu^\prime)+{1\over 2} (1+\mu^2)(1+\mu^{\prime \> 2}) \rbrack
+ F_n^{(3)}(\mu, \mu^\prime) 
+$$     $$
++\gamma(\mu, \mu^\prime) F_n^{(1)}(\mu, \mu^\prime,1c)
++F_n^{(2)}(\mu, \mu^\prime,1c) \rbrack 
+$$     $$+2 \mu \mu^\prime \gamma(\mu, \mu^\prime)
+  F_n^{(3)}(\mu, \mu^\prime,1c) +{1\over 2} \gamma^2(\mu, \mu^\prime) F_n^{(3)}(\mu, \mu^\prime,2c). 
+\end{equation}
+Some further relations are useful, and can be easily checked by inspecting
+the above relations, for even functions we have
+\begin{equation}
+M_{ij}^{(n)}(-\mu, -\mu^\prime)= M_{ij}^{(n)}(\mu, \mu^\prime)
+\end{equation}
+\begin{equation}
+M_{ij}^{(n)}(\mu, -\mu^\prime)= M_{ij}^{(n)}(-\mu, \mu^\prime),
+\end{equation}
+and for odd functions 
+\begin{equation}
+M_{ij}^{(n)}(-\mu, -\mu^\prime)=-M_{ij}^{(n)}(\mu, \mu^\prime)
+\end{equation}
+\begin{equation}
+M_{ij}^{(n)}(\mu, -\mu^\prime)= -M_{ij}^{(n)}(-\mu, \mu^\prime).
+\end{equation}
+All the above are given by Dave \cite{Dave1:Miebib} cite{Dave2:Miebib}.
+The formula given by Dave (eqns 33 and 34) in \cite{Dave2:Miebib} have the subscripts $ij$ reversed
+on the right hand side, which we take to be a typographical error. 
+
+
 \section{Afterword}
 We have reviewed much of the (basic) theory of the scattering of electromagnetic radiation from a 
 sphere, but further material (and corrections) may be added at some later stage. The author 
@@ -1132,7 +1440,9 @@ where numerical details are looked into, and the integration over size distribut
 This also points to downloadable computer code which calculates the phase function 
 directly in terms of the Mie $a$ and $b$ coefficients without any need for the angular functions
 $\pi_n$ and $\tau_n$.
-\bibliography{../../Mybib}
+
+%\bibliography{../../Mybib}
+\printbibliography
 
 \end{document}
 

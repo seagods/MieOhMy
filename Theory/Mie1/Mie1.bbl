@@ -1,31 +1,221 @@
-\begin{thebibliography}{1}
+% $ biblatex auxiliary file $
+% $ biblatex version 2.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
 
-\bibitem{Liou:Mybib}
-K.~N. Liou, {\em An Introduction to Atmospheric Radiation} (Academic Press,
-  Elsevier Books, Oxford, 2002).
+\entry{Liou:Miebib}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Liou}{L.}%
+     {K.~N.}{K.~N.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Academic Press, Elsevier Books}%
+  }
+  \strng{namehash}{LKN1}
+  \strng{fullhash}{LKN1}
+  \field{title}{An Introduction to Atmospheric Radiation}
+  \list{location}{1}{%
+    {Oxford}%
+  }
+  \field{year}{2002}
+\endentry
 
-\bibitem{Deirmendjian:Mybib}
-D. Deirmendjian, {\em Electromagnetic Scattering on Spherical Polydispersions}
-  (The RAND Corporation, Santa Monica, California, 1969).
+\entry{Deirmendjian:Miebib}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Deirmendjian}{D.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {The RAND Corporation}%
+  }
+  \strng{namehash}{DD1}
+  \strng{fullhash}{DD1}
+  \field{title}{Electromagnetic Scattering on Spherical Polydispersions}
+  \list{location}{1}{%
+    {Santa Monica, California}%
+  }
+  \field{year}{1969}
+\endentry
 
-\bibitem{FeynLect:Mybib}
-R. Feynman, R.~B. Leighton, and M. Sands, {\em The Feyman Lectures on Physics}
-  (Addison-Wesley Publishing Company, Reading Massachusetts, Menlo Park,
-  California, London, Sydney, Manilla, 1964), Vol.~2.
+\entry{FeynLect:Miebib}{book}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Feynman}{F.}%
+     {R.}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Leighton}{L.}%
+     {R.~B.}{R.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sands}{S.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Addison-Wesley Publishing Company}%
+  }
+  \strng{namehash}{FRLRBSM1}
+  \strng{fullhash}{FRLRBSM1}
+  \field{title}{The Feyman Lectures on Physics}
+  \field{volume}{2}
+  \list{location}{1}{%
+    {Reading Massachusetts, Menlo Park, California, London, Sydney, Manilla}%
+  }
+  \field{year}{1964}
+\endentry
 
-\bibitem{AbramowitzStegun:Mybib}
-M. Abramowitz and I. Stegun, {\em Handbook of Mathematical Functions} (Dover
-  Books, New York, 1972).
+\entry{AbramowitzStegun:Miebib}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Abramowitz}{A.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stegun}{S.}%
+     {I.}{I.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Dover Books}%
+  }
+  \strng{namehash}{AMSI1}
+  \strng{fullhash}{AMSI1}
+  \field{title}{Handbook of Mathematical Functions}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{1972}
+\endentry
 
-\bibitem{Watson:Mybib}
-G.~N. Watson, {\em A Treatise on the Theory of Bessel Functions} (Cambridge
-  University Press, Cambridge, 1995).
+\entry{Watson:Miebib}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Watson}{W.}%
+     {G.~N.}{G.~N.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Cambridge University Press}%
+  }
+  \strng{namehash}{WGN1}
+  \strng{fullhash}{WGN1}
+  \field{title}{A Treatise on the Theory of Bessel Functions}
+  \list{location}{1}{%
+    {Cambridge}%
+  }
+  \field{year}{1995}
+\endentry
 
-\bibitem{Chandrasekhar:Mybib}
-S. Chandrasekhar, {\em Radiative Transfer} (Dover Books, New York, 1960).
+\entry{Chandrasekhar:Miebib}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Chandrasekhar}{C.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Dover Books}%
+  }
+  \strng{namehash}{CS1}
+  \strng{fullhash}{CS1}
+  \field{title}{Radiative Transfer}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{1960}
+\endentry
 
-\bibitem{BornWolf:Mybib}
-M. Born and E. Wolf, {\em Principles of Optics} (Pergamon Press, New York,
-  1975).
+\entry{BornWolf:Miebib}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Born}{B.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wolf}{W.}%
+     {E.}{E.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Pergamon Press}%
+  }
+  \strng{namehash}{BMWE1}
+  \strng{fullhash}{BMWE1}
+  \field{title}{Principles of Optics}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{1975}
+\endentry
 
-\end{thebibliography}
+\entry{Dave1:Miebib}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Dave}{D.}%
+     {J.~V.}{J.~V.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DJV1}
+  \strng{fullhash}{DJV1}
+  \field{number}{8}
+  \field{pages}{1888\bibrangedash 2684}
+  \field{title}{Coefficients of the Legendre and Fourier Series for the
+  Scattering Functions of Spherical Particles}
+  \field{volume}{9}
+  \field{journaltitle}{Applied Optics}
+  \field{year}{1970}
+\endentry
+
+\entry{Dave2:Miebib}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Dave}{D.}%
+     {J.~V.}{J.~V.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DJV1}
+  \strng{fullhash}{DJV1}
+  \field{number}{12}
+  \field{pages}{2673\bibrangedash 2684}
+  \field{title}{Intensity and Polarisation of the Radiation Emerging from a
+  Plane-Parallel Atmosphere Containing Monodispersed Aerosols}
+  \field{volume}{9}
+  \field{journaltitle}{Applied Optics}
+  \field{year}{1970}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

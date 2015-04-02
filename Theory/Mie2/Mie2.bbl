@@ -1,33 +1,242 @@
-\begin{thebibliography}{1}
+% $ biblatex auxiliary file $
+% $ biblatex version 2.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
 
-\bibitem{EMScatt:Mybib}
-C. Godsalve, Electromagnetic Scattering from a Sphere, 2006,
-  http://seagods.stormpages.com/Physics.html.
+\entry{EMScatt:Miebib}{online}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Godsalve}{G.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GC1}
+  \strng{fullhash}{GC1}
+  \field{title}{Electromagnetic Scattering from a Sphere}
+  \verb{url}
+  \verb http://seagods.stormpages.com/Physics.html
+  \endverb
+  \field{year}{2006}
+\endentry
 
-\bibitem{WisRep:Mybib}
-W.~J. Wiscombe, Technical Report No.~NCAR-TN-140+NTR, NCAR (unpublished).
+\entry{WisRep:Miebib}{report}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Wiscombe}{W.}%
+     {W.~J.}{W.~J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{WWJ1}
+  \strng{fullhash}{WWJ1}
+  \field{number}{NCAR-TN-140+NTR}
+  \field{title}{Mie Scattering Calculations: Advances in Technique and Fast
+  Vector-Speed Computer Codes.}
+  \list{institution}{1}{%
+    {NCAR}%
+  }
+  \field{type}{techreport}
+  \field{year}{1996}
+\endentry
 
-\bibitem{Deirmendjian:Mybib}
-D. Deirmendjian, {\em Electromagnetic Scattering on Spherical Polydispersions}
-  (The RAND Corporation, Santa Monica, California, 1969).
+\entry{Deirmendjian:Miebib}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Deirmendjian}{D.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {The RAND Corporation}%
+  }
+  \strng{namehash}{DD1}
+  \strng{fullhash}{DD1}
+  \field{title}{Electromagnetic Scattering on Spherical Polydispersions}
+  \list{location}{1}{%
+    {Santa Monica, California}%
+  }
+  \field{year}{1969}
+\endentry
 
-\bibitem{AbramowitzStegun:Mybib}
-M. Abramowitz and I. Stegun, {\em Handbook of Mathematical Functions} (Dover
-  Books, New York, 1972).
+\entry{AbramowitzStegun:Miebib}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Abramowitz}{A.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stegun}{S.}%
+     {I.}{I.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Dover Books}%
+  }
+  \strng{namehash}{AMSI1}
+  \strng{fullhash}{AMSI1}
+  \field{title}{Handbook of Mathematical Functions}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{1972}
+\endentry
 
-\bibitem{Vector:Mybib}
-C. Godsalve, 1-D Vector Radiative Transfer, 2006,
-  http://seagods.stormpages.com/Physics.html.
+\entry{Dave1:Miebib}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Dave}{D.}%
+     {J.~V.}{J.~V.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DJV1}
+  \strng{fullhash}{DJV1}
+  \field{number}{8}
+  \field{pages}{1888\bibrangedash 2684}
+  \field{title}{Coefficients of the Legendre and Fourier Series for the
+  Scattering Functions of Spherical Particles}
+  \field{volume}{9}
+  \field{journaltitle}{Applied Optics}
+  \field{year}{1970}
+\endentry
 
-\bibitem{Dave1:Mybib}
-J.~V. Dave, Applied Optics {\bf 9},  1888  (1970).
+\entry{Dave2:Miebib}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Dave}{D.}%
+     {J.~V.}{J.~V.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DJV1}
+  \strng{fullhash}{DJV1}
+  \field{number}{12}
+  \field{pages}{2673\bibrangedash 2684}
+  \field{title}{Intensity and Polarisation of the Radiation Emerging from a
+  Plane-Parallel Atmosphere Containing Monodispersed Aerosols}
+  \field{volume}{9}
+  \field{journaltitle}{Applied Optics}
+  \field{year}{1970}
+\endentry
 
-\bibitem{Dave2:Mybib}
-J.~V. Dave, Applied Optics {\bf 9},  2673  (1970).
+\entry{ShettleFenn:Miebib}{booklet}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Fenn R.~W}{F.~R.~W.}%
+     {Shettle E.~P.}{S.~E.~P.}%
+     {and.}{a.}%
+     {}{}}%
+  }
+  \strng{namehash}{FRWSEPa1}
+  \strng{fullhash}{FRWSEPa1}
+  \field{howpublished}{(U. S.) Airforce Geophysical Library AFGL-tr-79-0214}
+  \field{title}{Models of the Aerosols of the Lower Atmosphere and the Effects
+  of Humidity Variations on their Optical Properties}
+  \field{year}{1979}
+\endentry
 
-\bibitem{ShettleFenn:Mybib}
-S.~E.~P. and. Fenn R.~W, Models of the Aerosols of the Lower Atmosphere and the
-  Effects of Humidity Variations on their Optical Properties, (U. S.) Airforce
-  Geophysical Library AFGL-tr-79-0214 (1979).
+\entry{RothmanETAL:Miebib}{article}{}
+  \name{author}{14}{}{%
+    {{}%
+     {Rothman}{R.}%
+     {L.~S.}{L.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gamache}{G.}%
+     {R.~R.}{R.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tipping}{T.}%
+     {R.~H.}{R.~H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rinsland}{R.}%
+     {C.~P.}{C.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smith}{S.}%
+     {M.~A.}{M.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Benner}{B.}%
+     {D.~C.}{D.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Devi}{D.}%
+     {V.~M.}{V.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Flaud}{F.}%
+     {J.~M.}{J.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Camypeyret}{C.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Perrin}{P.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Goldman}{G.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Massie}{M.}%
+     {S.~T.}{S.~T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Brown}{B.}%
+     {L.~R.}{L.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Toth}{T.}%
+     {R.~A.}{R.~A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RLS+1}
+  \strng{fullhash}{RLSGRRTRHRCPSMABDCDVMFJMCCPAGAMSTBLRTRA1}
+  \field{number}{5-6}
+  \field{pages}{469\bibrangedash 507}
+  \field{title}{The HITRAN Molecular Database - Editions of 1991 and 1992}
+  \field{volume}{48}
+  \field{journaltitle}{Journal of Quantitative Spectroscopy and Radiative
+  Transfer}
+  \field{year}{1992}
+\endentry
 
-\end{thebibliography}
+\lossort
+\endlossort
+
+\endinput

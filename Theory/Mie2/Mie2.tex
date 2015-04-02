@@ -1,4 +1,4 @@
-\documentstyle[12pt]{article}
+\documentclass[12pt]{article}
 \setlength{\textheight}{9.80in}
 \setlength{\textwidth}{6.40in}
 \setlength{\oddsidemargin}{0.0mm}
@@ -9,15 +9,24 @@
 \newtheorem{defn}{Definition}
 \renewcommand{\baselinestretch}{1.2}
 
+
+\usepackage{amsmath}
+
+%\bibliographystyle{prsty}
+%% Here we are using biblatex rather than bibtex
+\usepackage[backend=bibtex, sorting=none]{biblatex} %Without sorting=none we get alphaphetical
+\bibliography{/home/daddio/Programs/MieOhMy/Theory/Miebib.bib}
+%\bibliographystyle{prsty}
+
+
+
 \begin{document}
-
-\bibliographystyle{prsty}
-
 
 \thispagestyle{empty}
 
 \title{Mie Theory Calculations}
 \author{Chris Godsalve}
+\date{July,11,2007}
 \maketitle
 
 \tableofcontents
@@ -25,11 +34,11 @@
 
 \section{Introduction}
 
-In the article {\it Electromagnetic Scattering From a Sphere} \cite{EMScatt:Mybib} I 
+The article {\it Electromagnetic Scattering From a Sphere}\footnote{updated April 2nd 2015}
 introduced the basics of the Mie theory, as well as some extensive revision on 
 electromagnetism and mathematics. At the end I pointed the reader to Warren Wiscombe's 
 excellent code that performs the task, and recommended the use of this code. 
-However, that of course didn't stop me writing my own, and this article 
+However, that of course didn't stop me writing my own, and this article\footnote{updated April 2nd 2015} 
 describes the nitty gritty of actually performing any calculations. 
 
 However, there is difference between what is described here and what was 
@@ -41,7 +50,8 @@ For practical applications, it is common that an integration over some
 statistical distribution of particle distributions.
 It is often the case that this will be a skew distribution with a long tail containing large
  particle sizes. It is here
-the ripple-spike problem occurs as described in appendix-B of Wiscombe's NCAR report \cite{WisRep:Mybib}.
+the ripple-spike problem occurs as described in appendix-B of Wiscombe's NCAR 
+report \cite{WisRep:Miebib}.
  Because of this, we shall investigate the sources of any possible numerical instability.
 
 At the end, a link is provided so that the reader can obtain my own code which calculates the Legendre coefficients
@@ -60,11 +70,11 @@ a_n=\frac{\psi^\prime_n(y)\psi_n(x)-m \psi_n(y) \psi^\prime_n(x)}{
 b_n=\frac{m \psi^\prime_n(y)\psi_n(x)- \psi_n(y) \psi^\prime_n(x)}{
   m \psi^\prime_n(y) \xi_n(x)- \psi_n(y) \xi^\prime_n(x)}.
 \end{equation}
-Here, $n \ge 1$, $x=ka=2 \pi a / \lambda$, and $y=ma$ for a complex refractive index  $m$.   The functions $\psi$ and $\chi$ arise in eqns.57-60 in \cite{EMScatt:Mybib}. Here, the $\xi$ are similar to the Hankel functions in that
+Here, $n \ge 1$, $x=ka=2 \pi a / \lambda$, and $y=ma$ for a complex refractive index  $m$.   The functions $\psi$ and $\chi$ arise in eqns.57-60 in \cite{EMScatt:Miebib}. Here, the $\xi$ are similar to the Hankel functions in that
 $\xi=\psi - i \chi$.
 Generally, the series where the $a_n$ and $b_n$ are the coefficients shall be truncated at some value $N$.
 
-We shall follow Diermendjian \cite{Deirmendjian:Mybib} and write
+We shall follow Diermendjian \cite{Deirmendjian:Miebib} and write
 \begin{equation}
 a_n=\frac{A_n(y) \psi_n(x)-m \psi^\prime_n(x)}{
    A_n(y) \xi_n(x)-m  \xi^\prime_n(x)}.
@@ -73,7 +83,7 @@ a_n=\frac{A_n(y) \psi_n(x)-m \psi^\prime_n(x)}{
 b_n=\frac{m A_n(y)\psi_n(x)-  \psi^\prime_n(x)}{
   m A_n(y) \xi_n(x)- \xi^\prime_n(x)}.
 \end{equation}
-Here, we have kept the notation from \cite{EMScatt:Mybib} , and simply introduced\begin{equation}
+Here, we have kept the notation from \cite{EMScatt:Miebib} , and simply introduced\begin{equation}
 A_n(y)=\frac{\psi_n^\prime(y)}{\psi_n(y)}.
 \end{equation}
 or 
@@ -81,7 +91,7 @@ or
 A_n(y)=-\frac{n}{y}+\frac{J_{n-1/2}(y)}{J_{n+1/2}(y) }.
 \end{equation}
 
-Furthermore, looking at the properties of the Bessel functions \cite{AbramowitzStegun:Mybib}, it turns out to be convenient to introduce the functions
+Furthermore, looking at the properties of the Bessel functions \cite{AbramowitzStegun:Miebib}, it turns out to be convenient to introduce the functions
 \begin{equation}
 w_n(x)=\sqrt{\frac{\pi x}{2}} [ J_{n+1/2}(x)-(-1)^n J_{-n-1/2}(x)].
 \end{equation}
@@ -189,7 +199,7 @@ arithmetic is concerned.
 So what should be done if,  for large $n$, both $J_{n+1/2}$ 
 and $J_{n+1+1/2}$ 
 are returned as zero by zbesj? According to Abramowitz and Stegun
- \textsection 9.3 \cite{AbramowitzStegun:Mybib},  for large orders
+ \textsection 9.3 \cite{AbramowitzStegun:Miebib},  for large orders
 
 \begin{equation}
 J_\nu(z) \sim \frac{1}{\sqrt{2 \pi \nu}} 
@@ -395,9 +405,10 @@ Before going on to the large $x$ limit, we now return to the problem of the $A_n
 the numerator and denominator vanish for large order because of the $(z/\nu)^\nu$ behaviour
 in eqn.13. We also saw that for large $n$ the $A_n$ ratio is well behaved if the use of
 the asymptotic expansion made for large $n$, and that Diermendjian had not noticed how the asymptotic
-limit could be used. Deirmendjian used recurrence relations for the $A_n$ \cite{Deirmendjian:Mybib}, 
+limit could be used. Deirmendjian used recurrence relations for the 
+ $A_n$ \cite{Deirmendjian:Miebib}, 
 and Wiscombe discusses more
-sophisticated and robust recurrence relations developed over some time \cite{WisRep:Mybib}.
+sophisticated and robust recurrence relations developed over some time \cite{WisRep:Miebib}.
 We observe two points, the $A_n$ grow almost linearly, and they are multiplied in the
 denominator by Bessel functions which also have a $(z/\nu)^\nu$ behaviour and vanish for
 large order. In other words, for practical purposes, the $A_n$ in the numerator are multiplied by zero
@@ -406,7 +417,8 @@ a straightforward use of Bessel function routines, or indeed the asymptotic rela
 seen  here in eqn.14. As far as the author can tell, all the effort put into the recurrence
 relations are unnecessary. If there is a small error in $A_n$ at any stage using the asymptotic limit,  
 the $a_n$ will be zero, or effectively zero anyway. One might wonder if the $a_n$'s denominator vanishes
-along with the numerator for large order, however, the asymptotic relation \cite{AbramowitzStegun:Mybib}
+along with the numerator for large order, however, the asymptotic 
+relation \cite{AbramowitzStegun:Miebib}
 ensures that this most certainly does not happen, i.e. for fixed $z$ in the limit of large $\nu$, 
 \begin{equation}
 Y_\nu(z) \sim \sqrt{ \frac{2} {\pi \nu} } \left ( \frac{e z}{2 \nu} \right )^{-\nu}.
@@ -415,13 +427,13 @@ Y_\nu(z) \sim \sqrt{ \frac{2} {\pi \nu} } \left ( \frac{e z}{2 \nu} \right )^{-\
 \section{More on the Large $x$ Limit}
 
 We suppose now, we do not have scattering from a single sphere as discussed
-in \cite{EMScatt:Mybib}, but scattering from a large number of spheres distributed somehow in space. This may approximate for instance a water droplet cloud. It is supposed that the spheres are generally far enough apart so that each sphere is far enough from the others so that the far field approximation holds for the interaction between the spheres. What is more, as is of interest in cloud and atmospheric aerosols, we have a large range of sizes of these spheres. What are the optical properties of such clouds and hazes according to electromagnetic theory.
+in \cite{EMScatt:Miebib}, but scattering from a large number of spheres distributed somehow in space. This may approximate for instance a water droplet cloud. It is supposed that the spheres are generally far enough apart so that each sphere is far enough from the others so that the far field approximation holds for the interaction between the spheres. What is more, as is of interest in cloud and atmospheric aerosols, we have a large range of sizes of these spheres. What are the optical properties of such clouds and hazes according to electromagnetic theory.
 
-This is the subject discussed extensively by Diermendjian \cite{Deirmendjian:Mybib}. Typically, the size distributions are well approximated by log-normal distributions or by modified gamma distributions. These distributions can have long `tails' into large particle sizes, and so when integrating any quantities over the size distribution to get say, an equivalent extinction coefficient, we may well need to calculate all the Mie theory quantities for large values of $x$. This is why we took a look at some of the asymptotic relations in the large $x$ limit. (We have some inkling on what will happen from the diagrams in 
+This is the subject discussed extensively by Diermendjian \cite{Deirmendjian:Miebib}. Typically, the size distributions are well approximated by log-normal distributions or by modified gamma distributions. These distributions can have long `tails' into large particle sizes, and so when integrating any quantities over the size distribution to get say, an equivalent extinction coefficient, we may well need to calculate all the Mie theory quantities for large values of $x$. This is why we took a look at some of the asymptotic relations in the large $x$ limit. (We have some inkling on what will happen from the diagrams in 
 the previous section,)
 
 To add to them, for arbitrary $\nu$, the asymptotic limits of $J_\nu(z)$ and 
-$Y_\nu (z)$ (in the large $\vert z \vert $ sense) are \cite{AbramowitzStegun:Mybib}.
+$Y_\nu (z)$ (in the large $\vert z \vert $ sense) are \cite{AbramowitzStegun:Miebib}.
 \begin{equation}
 J_\nu(z)=\sqrt{ \frac{2}{\pi z}}
    \left \lbrace
@@ -496,7 +508,7 @@ So, we are in similar numerical trouble here,
 
 \section{ Calculating the Scattering Function}
 
-In eqns. 121, 122, 131, and eqn 142 of \cite{EMScatt:Mybib} we encountered the angular
+In eqns. 121, 122, 131, and eqn 142 of \cite{EMScatt:Miebib} we encountered the angular
  distribution of the scattered energy and the phase function.
 We note that first off, in eqns 121 and 131 we have the product of two 
 infinite series with  coefficients $a_n$ and $b_n$.
@@ -527,9 +539,9 @@ and $\Lambda_k(x)$ are the Legendre coefficients for the phase matrix, then
 
 
 To add to the confusion,
-in \cite{Dave1:Mybib}, Dave defines the matrix elements such as $M_1$ as
+in \cite{Dave1:Miebib}, Dave defines the matrix elements such as $M_1$ as
 the elements of the scattering matrix, and gives the Legendre coefficients $L$
-as the Legendre coefficients of the scattering matrix. However in \cite{Dave2:Mybib}
+as the Legendre coefficients of the scattering matrix. However in \cite{Dave2:Miebib}
 Dave uses the same notation $M_1$ notation for the phase matrix.
 
 
@@ -544,7 +556,7 @@ value of $N_{max}$ might be very large indeed.
 We could multiply out the series, and integrate the quantities such as
 $a_i(x) \times b_j(x)$ and obtain the Legendre coefficients by integration over angle
 at the end of the integration over size distribution.
-However \cite{Dave1:Mybib}, J. V. Dave has 
+However \cite{Dave1:Miebib}, J. V. Dave has 
 shown that the Legendre coefficients
  may be calculated directly from the Mie $a_n$ and $b_n$ coefficients 
 without any angular numerical integration over angles 
@@ -557,7 +569,7 @@ sums  involving the $C C^*$ and like terms are functions of $x$.
 
 For each $x$,  we must calculate all the $a_n$ and $b_n$. From 
 these the $C$'s and $D$'s
- of eqn.20 in \cite{Vector:Mybib} can be calculated.
+ of eqn.20 in \textsection8 (eqn.157) of \cite{EMScatt:Miebib} can be calculated.
 \begin{equation}
 C_k=\frac{1}{k}(2k-1)(k-1)b_{k-1}
 +(2k-1)\sum_{i=1}^\infty \left \lbrace \left \lbrack \frac{1}{p}+\frac{1}{p+1} \right \rbrack a_p
@@ -591,11 +603,9 @@ upper triangular matrix. Each matrix element will now be integrated
 over a size distribution, and the Legendre
 coefficients may be calculated after the integration has been 
 performed.
-
-{\it
  The $L^1$ and $L^2$ are the coefficients
- for Diermendjian's $i_2$ and $i_1$ (\cite{Deirmendjian:Mybib} eqn.76). In Diermendjian's
-notation, $i_4$ has the opposite sign to Dave's $D_{21}$ (\cite{Dave2:Mybib} eqn.6). }
+ for Diermendjian's $i_2$ and $i_1$ (\cite{Deirmendjian:Miebib} eqn.76). In Diermendjian's
+notation, $i_4$ has the opposite sign to Dave's $D_{21}$ (\cite{Dave2:Miebib} eqn.6).
 
 
 We shall examine a few graphs for the functions $C$ and $D$ to get some feel as to how
@@ -673,7 +683,7 @@ That is, the decision of how many intervals are needed (or how far to march
 along the $x$ axis), and the order of quadrature rule to use. The
 upper triangular matrices should, of course, be stored in compact vector form.
 
-Now we return to eqn.29.  We shall repeat Dave here \cite{Dave1:Mybib}, 
+Now we return to eqn.29.  We shall repeat Dave here \cite{Dave1:Miebib}, 
 hopefully we shall make it easier to follow than in the original.
 The start value of the outer sum over $m$ is 0 for $k=1$ and $k=2$. It is 1
  for $k=3$ and $k=4$, and it is 2 for $k=5$ and $k=6$. The sequence is obvious. 
@@ -776,26 +786,26 @@ we are given the total mass or volume of the particles in the cloud or haze.
 As to values of $\alpha$ and $\gamma$,
 Deirmendjian uses the following values for $\alpha$ and $\gamma$ in his definitions
 of distribution types.
-distribution \cite{Deirmendjian:Mybib}. 
+distribution \cite{Deirmendjian:Miebib}. 
 \center{
 \begin{tabular}{lllll} \hline
-Type & $N$ &  $r_m$  & $\alpha$ &  $\gamma$ &  \\ \hline
-Rain M & 100$cm^{-3}$  & 0.05 $\mu m$ &  1  & 1/2 & \\ 
-Haze M & 1000$cm^{-3}$  & 0.05 $mm$ &  1  & 1/2 & \\ 
-Haze L & 10$cm^{-3}$  & 0.07 $\mu m$ &  2  & 1/2 & \\ 
-Rain L & 1000$cm^{-3}$  & 0.05 $\mu m$ &  2  & 1/2 & \\ 
-Haze H & 100$cm^{-3}$  & 0.1 $\mu m$ &  2  & 1 & \\ 
-Hail H & 10$cm^{-3}$  & 4.0 $\mu m$ &  2  & 1 & \\ 
-Cumulus C.1 & 100$\mu m^{-3}$  & 4.0 $\mu m$ &  6  & 1 & \\ 
-Corona C.2 & 100$\mu m^{-3}$  & 0.05 $\mu m$ &  8  & 3 & \\ 
-MOP cloud C.3 & 100$\mu m^{-3}$  & 2.0 $\mu m$ &  8  & 3 & \\ 
-Corona C.4 & 100$cm^{-3}$  & 4.0 $\mu m$ & 61  & 3 & \\ \hline
+Type           & $N$            & $r_m$        & $\alpha$  &  $\gamma$  \\ \hline
+Rain M        & 100$cm^{-3}$    & 0.05 $\mu m$ &  1        & 1/2   \\ 
+Haze M        & 1000$cm^{-3}$   & 0.05 $mm$    &  1        & 1/2   \\ 
+Haze L        & 10$cm^{-3}$     & 0.07 $\mu m$ &  2        & 1/2   \\ 
+Rain L        & 1000$cm^{-3}$   & 0.05 $\mu m$ &  2        & 1/2   \\ 
+Haze H        & 100$cm^{-3}$    &  0.1 $\mu m$ &  2        & 1     \\ 
+Hail H        & 10$cm^{-3}$     & 4.0 $\mu m$  &  2        & 1     \\ 
+Cumulus C.1   & 100$\mu m^{-3}$ & 4.0 $\mu m$  &  6        & 1     \\ 
+Corona C.2    & 100$\mu m^{-3}$ & 0.05 $\mu m$ &  8        & 3     \\ 
+MOP cloud C.3 & 100$\mu m^{-3}$ & 2.0 $\mu m$  &  8        & 3     \\ 
+Corona C.4    & 100$cm^{-3}$    & 4.0 $\mu m$  & 61        & 3     \\ \hline
 \end{tabular}
 }
 \begin{flushleft}
 In other cases, the log-normal (or lognormal) distribution is a good description.
 Both the modified gamma and lognormal distribution are used by
-Shettle and Fenn \cite{ShettleFenn:Mybib} in their classic work.
+Shettle and Fenn \cite{ShettleFenn:Miebib} in their classic work.
 The standard form for the lognormal distribution is
 \begin{equation}
 \rho(r)= \frac{ e^{-\lbrack (ln r-\mu)^2/2 \sigma^2 \rbrack} }{ r \sigma \sqrt{2 \pi}}.
@@ -836,7 +846,7 @@ Now if we write $ {\overline \sigma} = \sigma/ln(10)$ we have the form
 \end{equation}
 Despite the odd looking mix of logarithms to different bases and the the number $e$,
 this is quite a natural way to present experimental data. Indeed, the distribution
-is used in this form in \cite{ShettleFenn:Mybib}. All the moments of eqn.47 follow 
+is used in this form in \cite{ShettleFenn:Miebib}. All the moments of eqn.47 follow 
 immediately on recalling that $\sigma = ln(10) {\overline \sigma}$. Note
 that the values of $\sigma$ tabulated in Shettle and Fenn are ${\overline \sigma}$
 according to the notation above.
@@ -881,7 +891,7 @@ $x^2$, so the integral of $\rho(x)$ might be very close to one, but we shall sti
 be chopping off the tail of the distribution too early if we use this latter 
 integral  as a measure. The value of $x$ at which the tolerance is met determines
 the truncation of the Mie series at $N_{max}=v x_{max}+w$. The recommended values
-are $v=2$ and $w=10$ \cite{Dave1:Mybib} p1890. However, the user is free to increase
+are $v=2$ and $w=10$ \cite{Dave1:Miebib} p1890. However, the user is free to increase
  either and they are part of the user input.
 
 Unfortunately there is yet another complication. We have found that cutting off
@@ -1116,10 +1126,10 @@ rule in eqn.31, and/or a lower tolerance.
 \begin{flushleft}
 
 We start off with a particularly challenging distribution, the large component
-of the Shettle and Fenn dust aerosols \cite{ShettleFenn:Mybib}. This has
+of the Shettle and Fenn dust aerosols \cite{ShettleFenn:Miebib}. This has
 a value of $\overline \sigma$ of 0.475, and a mode radius of $0.5\mu m$.
 At a wavelength of $0.337 \mu m$ this has a refractive index of 1.53-0.008 $i$
- as obtainable from  HITRAN \cite{RothmanETAL:Mybib}. 
+ as obtainable from  HITRAN \cite{RothmanETAL:Miebib}. 
 
 A few years back, the  author had a 1GHz PC with a 0.5Gbyte RAM and a Linux
  operating system. So the reader
@@ -1152,7 +1162,7 @@ can see how things behave in practice. First we start off with a modified
 gamma distribution with $\alpha=1$ and $\gamma=1/2$. The mode radius is
 set at $r_m=0.05 \mu m$ which corresponds to Deirmendjian's Haze-M model.
 We use a refractive index of $1.34-0 i$ at a wavelength of $0.45 \mu m$. This corresponds to Table T.1
-of \cite{Deirmendjian:Mybib}. An 8 point quadrature rule 
+of \cite{Deirmendjian:Miebib}. An 8 point quadrature rule 
 was used on each sub-interval.
 
 The distribution function multiplied by $x^2$ is plotted below. It seems
@@ -1204,8 +1214,7 @@ has no inclination to code up all three methods.
 
 \end{flushleft}
 
-
-\bibliography{../Mybib}
+\printbibliography
 
 \end{document}
 
